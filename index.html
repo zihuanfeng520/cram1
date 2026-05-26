@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;700;900&family=Noto+Sans+TC:wght@300;400;500&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 <style>
   /* ── 變數與基礎設定 ── */
@@ -528,15 +529,16 @@
         </div>
 
         <div class="form-group">
-          <label>聯絡方式 <span class="form-note">(*以下 LINE、信箱、電話請至少提供一項)</span></label>
+          <label>聯絡方式 <span class="form-note">(*信箱與電話為必填，LINE 為選填)</span></label>
+          
           <div style="margin-bottom: 12px;">
-              <input type="text" id="contact-line" name="LINE_ID" placeholder="您的 LINE ID">
+              <input type="email" id="contact-email" name="email" placeholder="您的電子信箱 (必填)" required>
           </div>
           <div style="margin-bottom: 12px;">
-              <input type="email" id="contact-email" name="email" placeholder="您的電子信箱">
+              <input type="tel" id="contact-phone" name="家長電話" placeholder="家長聯絡電話 (必填，例如: 0912-345-678)" required>
           </div>
           <div>
-              <input type="tel" id="contact-phone" name="家長電話" placeholder="家長聯絡電話 (例如: 0912-345-678)">
+              <input type="text" id="contact-line" name="LINE_ID" placeholder="您的 LINE ID (選填)">
           </div>
         </div>
 
@@ -560,6 +562,15 @@
         <div class="form-group">
           <label for="parent-message">想說的話 (選填)</label>
           <textarea id="parent-message" name="家長留言" placeholder="請填寫孩子的學習狀況或您特別在意的部分..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label id="math-captcha-label" for="math-captcha-input">防機器人驗證：請問 X + Y = ?</label>
+          <input type="number" id="math-captcha-input" placeholder="請輸入數字答案" required>
+        </div>
+
+        <div class="form-group" style="display: flex; justify-content: center; margin-bottom: 20px;">
+          <div class="g-recaptcha" data-sitekey="6LeCLP4sAAAAAIhxXn_hjOCa4Fe4wfjHDpcTaFcm"></div>
         </div>
         
         <p style="font-size: 12px; color: #8a7d6b; margin-bottom: 10px; text-align: center;">* 若未收到系統確認信，請至垃圾郵件匣查看，或直接來電聯繫。</p>
@@ -671,6 +682,22 @@
         input.addEventListener('wheel', e => e.preventDefault(), { passive: false });
     });
 
+    // --- 新增：自製防機器人數學驗證題庫生成 ---
+    const mathLabel = document.getElementById('math-captcha-label');
+    const mathInput = document.getElementById('math-captcha-input');
+    let mathAnswer = 0;
+
+    function generateMathCaptcha() {
+        const num1 = Math.floor(Math.random() * 10) + 1; // 產生 1~10 亂數
+        const num2 = Math.floor(Math.random() * 10) + 1; // 產生 1~10 亂數
+        mathAnswer = num1 + num2;
+        mathLabel.innerHTML = `防機器人驗證 <span class="form-note">(*請回答以下算式)</span><br><br>請問 <strong>${num1} + ${num2} = ?</strong>`;
+        mathInput.value = '';
+    }
+    // 網頁載入時馬上產生一題
+    generateMathCaptcha();
+    // ------------------------------------------
+
     // 6. 表單送出：【同時雙引擎並發發送】
     const bookingForm = document.getElementById('booking-form');
     const submitBtn = document.getElementById('submit-btn');
@@ -678,6 +705,35 @@
 
     bookingForm.addEventListener('submit', function(event) {
         event.preventDefault(); 
+        
+        // --- 檢查 1：自製數學驗證 ---
+        if (parseInt(mathInput.value) !== mathAnswer) {
+            alert('防機器人驗證：數學答案錯誤，請再試一次！');
+            generateMathCaptcha(); // 答錯就重出一題
+            mathInput.focus();
+            return;
+        }
+
+        // --- 檢查 2：Google reCAPTCHA 驗證 ---
+        const recaptchaResponse = grecaptcha.getResponse();
+        if (recaptchaResponse.length === 0) {
+            alert('請先勾選「我不是機器人」驗證！');
+            return;
+        }
+
+        // 【作業測試用】將你要求的密鑰 (Secret Key) 寫入前端
+        const secretKey = '6LeCLP4sAAAAAIkd0CIrohhvjiVSzBZUY5hvaJqr';
+        console.log(`[驗證資訊] 準備使用 Secret Key: ${secretKey} 與 Token: ${recaptchaResponse} 進行驗證...`);
+        /*
+        fetch('https://www.google.com/recaptcha/api/siteverify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `secret=${secretKey}&response=${recaptchaResponse}`
+        })
+        .then(res => res.json())
+        .then(data => console.log('驗證結果:', data));
+        */
+        // --------------------------------
         
         // 防護：防止狂刷表單 (一日上限 3 次)
         const today = new Date().toLocaleDateString();
@@ -699,8 +755,9 @@
         const emailInput = document.getElementById('contact-email').value.trim();
         const phoneInput = document.getElementById('contact-phone').value.trim();
 
-        if (lineInput === '' && emailInput === '' && phoneInput === '') {
-            alert('請至少提供一項聯絡方式 (LINE、信箱或電話)，以便我們與您聯繫！');
+        // 雖然 HTML 已經加了 required，但用 JS 再多做一層防護更保險
+        if (emailInput === '' || phoneInput === '') {
+            alert('請務必提供「電子信箱」與「家長電話」，以便我們與您聯繫！');
             return;
         }
 
@@ -781,6 +838,11 @@
                     alert('表單已成功送出！若您有留下電子信箱，系統將寄發確認信給您。\n我們將盡快由專員與您聯繫。');
                     bookingForm.reset(); 
                     scoreDetails.style.display = 'none'; 
+                    
+                    // --- 成功後重置所有驗證，讓使用者可以再次發送 ---
+                    grecaptcha.reset();
+                    generateMathCaptcha();
+                    // ----------------------------------------------------
                 } else {
                     throw new Error('雙引擎皆發送失敗');
                 }
