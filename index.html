@@ -253,6 +253,15 @@
     margin-top: 40px; border: 1px solid rgba(201,168,76,.2);
   }
 
+  /* 社群按鈕 (Social Icons) */
+  .social-links { display: flex; gap: 12px; margin-top: 24px; }
+  .social-links a {
+    width: 40px; height: 40px; border-radius: 50%; background: var(--ink); color: var(--gold);
+    display: flex; align-items: center; justify-content: center; text-decoration: none;
+    font-weight: bold; transition: transform .3s, background .3s; font-size: 18px;
+  }
+  .social-links a:hover { transform: translateY(-3px); background: var(--accent); color: var(--gold-light); }
+
   /* 表單 UI 設計 */
   .contact-form {
     background: var(--cream); border-radius: 4px; padding: 48px;
@@ -459,6 +468,19 @@
         </div>
       </div>
       
+      <div class="social-links">
+        <a href="https://line.me/ti/p/你的LINE網址" target="_blank" title="加入官方 LINE">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 4.269 8.846 10.036 9.608.391.084.922.258 1.057.592.122.303.079.767.039 1.083l-.172 1.027c-.053.303-.243 1.187 1.039.647 1.281-.54 6.911-4.069 9.428-6.967 1.739-1.906 2.573-3.812 2.573-5.99zm-15.568 2.529h-2.316V8.121h2.316v1.077h-1.121v.791h1.121v1.076h-1.121v.691h1.121v1.077zm3.109 0h-1.196V8.121h1.196v4.712zm3.626 0h-1.121l-1.393-2.285v2.285h-1.195V8.121h1.121l1.393 2.285V8.121h1.195v4.712zm3.504-3.636h-1.121v.691h1.121v1.076h-1.121v.791h1.121v1.077h-2.316V8.121h2.316v1.076z"/>
+          </svg>
+        </a>
+        <a href="https://www.facebook.com/你的臉書粉專網址" target="_blank" title="前往 Facebook 粉絲專頁">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.675 0H1.325C.593 0 0 .593 0 1.325v21.351C0 23.406.593 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.323-.593 1.323-1.325V1.325C24 .593 23.407 0 22.675 0z"/>
+          </svg>
+        </a>
+      </div>
+
       <div class="map-container">
         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.70350669229!2d121.5619183!3d25.0441403!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442abb6da80a7ad%3A0xacc4d11dc963103c!2sTaipei%20City%20Hall!5e0!3m2!1sen!2stw!4v1700000000000!5m2!1sen!2stw" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
@@ -467,8 +489,14 @@
     <div class="contact-form reveal reveal-delay-1">
       <h3 class="form-title">填寫諮詢資料</h3>
       <form id="booking-form">
+        <input type="hidden" name="_subject" id="email-subject" value="新的預約諮詢！">
+        
+        <input type="text" name="_honey" style="display:none">
+        
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_autoresponse" value="您好！我們已經收到您的預約諮詢資料。頂峰菁英教育的專員將會盡快透過您留下的聯絡方式與您聯繫，謝謝您！">
+        
+        <input type="hidden" id="sender-ip" name="Sender_IP" value="無法取得">
         
         <div class="form-row">
           <div class="form-group">
@@ -485,18 +513,18 @@
           <label for="student-grade">就讀年級</label>
           <select id="student-grade" name="就讀年級" required>
               <option value="" disabled selected>請選擇目前就讀年級</option>
-              <option value="e1">國小一年級</option>
-              <option value="e2">國小二年級</option>
-              <option value="e3">國小三年級</option>
-              <option value="e4">國小四年級</option>
-              <option value="e5">國小五年級</option>
-              <option value="e6">國小六年級</option>
-              <option value="j1">國一</option>
-              <option value="j2">國二</option>
-              <option value="j3">國三</option>
-              <option value="s1">高一</option>
-              <option value="s2">高二</option>
-              <option value="s3">高三</option>
+              <option value="國小一年級">國小一年級</option>
+              <option value="國小二年級">國小二年級</option>
+              <option value="國小三年級">國小三年級</option>
+              <option value="國小四年級">國小四年級</option>
+              <option value="國小五年級">國小五年級</option>
+              <option value="國小六年級">國小六年級</option>
+              <option value="國中一年級">國中一年級</option>
+              <option value="國中二年級">國中二年級</option>
+              <option value="國中三年級">國中三年級</option>
+              <option value="高中一年級">高中一年級</option>
+              <option value="高中二年級">高中二年級</option>
+              <option value="高中三年級">高中三年級</option>
           </select>
         </div>
 
@@ -564,7 +592,15 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     
-    // 1. 滑鼠游標特效 (只在支援細緻游標的設備上運行)
+    // 0. 抓取對方 IP 
+    fetch('https://api.ipify.org?format=json')
+      .then(response => response.json())
+      .then(data => {
+          if(data.ip) { document.getElementById('sender-ip').value = data.ip; }
+      })
+      .catch(error => console.log('IP 抓取略過'));
+
+    // 1. 滑鼠游標特效
     if (window.matchMedia("(pointer: fine)").matches) {
       const cursor = document.getElementById('cursor');
       const ring = document.getElementById('cursorRing');
@@ -595,16 +631,21 @@
       link.addEventListener('click', () => navMenu.classList.remove('active'));
     });
 
-    // 3. 滾動浮現動畫 (Scroll Reveal)
+    // 3. 【修改】：滾動浮現動畫 (支援重複觸發)
     const reveals = document.querySelectorAll('.reveal');
     const io = new IntersectionObserver((entries) => {
       entries.forEach(e => {
-        if (e.isIntersecting) { e.target.classList.add('visible'); }
+        if (e.isIntersecting) { 
+            e.target.classList.add('visible'); 
+        } else {
+            // 當元素離開畫面時移除 class，這樣下次滑到就又會重新播放動畫
+            e.target.classList.remove('visible'); 
+        }
       });
     }, { threshold: 0.12 });
     reveals.forEach(el => io.observe(el));
 
-    // 4. 條件式表單 (展開分數區塊)
+    // 4. 條件式表單
     const radioYes = document.getElementById('score-yes');
     const radioNo = document.getElementById('score-no');
     const scoreDetails = document.getElementById('score-details');
@@ -626,21 +667,34 @@
         input.addEventListener('wheel', e => e.preventDefault(), { passive: false });
     });
 
-    // 6. 表單送出 (AJAX 嚴格雙重驗證版本)
+    // 6. 表單送出與防護機制
     const bookingForm = document.getElementById('booking-form');
     const submitBtn = document.getElementById('submit-btn');
     const btnText = document.getElementById('btn-text');
 
     bookingForm.addEventListener('submit', function(event) {
-        event.preventDefault(); // 阻止預設跳轉
+        event.preventDefault(); 
         
-        // 【本地端防呆攔截閘門】
-        if (window.location.protocol === 'file:') {
-            alert('【開發者提示】偵測到本地端 (file:///) 測試。為防止假性成功，已攔截送出，請上傳至伺服器 (如 GitHub Pages) 後再進行真實測試！');
+        // 【新增防護】：防止狂刷表單 (一日上限 3 次)
+        const today = new Date().toLocaleDateString();
+        let rateLimitData = JSON.parse(localStorage.getItem('bookingRateLimit') || '{}');
+        
+        // 檢查是否過了一天，是的話歸零
+        if (rateLimitData.date !== today) {
+            rateLimitData = { date: today, count: 0 };
+        }
+        
+        // 檢查今日發送次數
+        if (rateLimitData.count >= 3) {
+            alert('【系統提示】\n系統偵測到您今日已發送多次預約。\n為確保服務品質，請您直接來電：(02) 2345-6789\n我們將由專人立即為您安排，感謝您的配合！');
             return;
         }
         
-        // 檢查聯絡方式三選一
+        if (window.location.protocol === 'file:') {
+            alert('【開發者提示】偵測到本地端 (file:///) 測試。已攔截送出，請上傳至伺服器後再進行真實測試！');
+            return;
+        }
+        
         const lineInput = document.getElementById('contact-line').value.trim();
         const emailInput = document.getElementById('contact-email').value.trim();
         const phoneInput = document.getElementById('contact-phone').value.trim();
@@ -650,7 +704,13 @@
             return;
         }
 
-        // 改變按鈕狀態，避免連點
+        // 【新增】：動態設定信件主旨，防止 Gmail 把信件全部折疊在一起
+        const studentName = document.getElementById('student-name').value.trim();
+        // 加入當下精準的毫秒時間戳記，確保每封信主旨絕對唯一
+        const uniqueTime = new Date().getTime(); 
+        document.getElementById('email-subject').value = `[預約] ${studentName} 的諮詢資料 - ${uniqueTime}`;
+
+        // 改變按鈕狀態
         const originalBtnText = btnText.innerText;
         btnText.innerText = '傳送資料中...';
         submitBtn.disabled = true;
@@ -663,29 +723,29 @@
             headers: { 'Accept': 'application/json' }
         })
         .then(response => {
-            // 【第一道防線】：檢查 HTTP 狀態碼是不是 200 (成功連線)
             if (!response.ok) {
-                throw new Error('伺服器連線異常 (狀態碼: ' + response.status + ')');
+                throw new Error('伺服器連線異常');
             }
             return response.json();
         })
         .then(data => {
-            // 【第二道防線】：嚴格檢查 FormSubmit 官方 API 是否明確標示成功
             if (data.success === "true" || data.success === true) {
-                alert('表單已成功送出！若您有填寫電子信箱，將會收到一封確認信。我們將盡快由專員與您聯繫。');
+                // 送出成功，計數器 +1 並存回瀏覽器
+                rateLimitData.count += 1;
+                localStorage.setItem('bookingRateLimit', JSON.stringify(rateLimitData));
+
+                alert('表單已成功送出！若您有留下電子信箱，系統將自動寄發確認信。我們將盡快由專員與您聯繫。');
                 bookingForm.reset(); 
                 scoreDetails.style.display = 'none'; 
             } else {
-                throw new Error('API 拒絕了此請求：' + JSON.stringify(data));
+                throw new Error('API 拒絕了此請求');
             }
         })
         .catch(error => {
             console.error('表單送出失敗紀錄:', error);
-            // 加入明確的電話號碼引導
             alert('【系統提示】\n很抱歉，表單目前無法成功送出。\n這可能是系統繁忙或網路連線不穩所導致。\n\n請您直接來電：(02) 2345-6789\n我們將由專人立即為您服務，感謝您的耐心！');
         })
         .finally(() => {
-            // 無論成功或失敗，最後都把按鈕恢復原狀
             btnText.innerText = originalBtnText;
             submitBtn.disabled = false;
         });
