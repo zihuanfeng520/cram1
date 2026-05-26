@@ -6,6 +6,8 @@
 <title>頂峰菁英教育 | 專業升學補習班</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;700;900&family=Noto+Sans+TC:wght@300;400;500&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
 <style>
   /* ── 變數與基礎設定 ── */
   :root {
@@ -490,12 +492,9 @@
       <h3 class="form-title">填寫諮詢資料</h3>
       <form id="booking-form">
         <input type="hidden" name="_subject" id="email-subject" value="新的預約諮詢！">
-        
         <input type="text" name="_honey" style="display:none">
-        
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_autoresponse" value="您好！我們已經收到您的預約諮詢資料。頂峰菁英教育的專員將會盡快透過您留下的聯絡方式與您聯繫，謝謝您！">
-        
         <input type="hidden" id="sender-ip" name="Sender_IP" value="無法取得">
         
         <div class="form-row">
@@ -563,7 +562,8 @@
           <textarea id="parent-message" name="家長留言" placeholder="請填寫孩子的學習狀況或您特別在意的部分..."></textarea>
         </div>
         
-        <button type="submit" id="submit-btn" class="btn-primary" style="width: 100%; margin-top: 10px;">
+        <p style="font-size: 12px; color: #8a7d6b; margin-bottom: 10px; text-align: center;">* 若未收到系統確認信，請至垃圾郵件匣查看，或直接來電聯繫。</p>
+        <button type="submit" id="submit-btn" class="btn-primary" style="width: 100%;">
           <span id="btn-text">送出資料 →</span>
         </button>
       </form>
@@ -590,6 +590,11 @@
 </footer>
 
 <script>
+  // 初始化 EmailJS：寫入你的 Public Key
+  (function() {
+      emailjs.init("dq7BIkVjvv-cdhlu5");
+  })();
+
   document.addEventListener('DOMContentLoaded', function() {
     
     // 0. 抓取對方 IP 
@@ -631,14 +636,13 @@
       link.addEventListener('click', () => navMenu.classList.remove('active'));
     });
 
-    // 3. 【修改】：滾動浮現動畫 (支援重複觸發)
+    // 3. 滾動浮現動畫 (支援重複觸發)
     const reveals = document.querySelectorAll('.reveal');
     const io = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) { 
             e.target.classList.add('visible'); 
         } else {
-            // 當元素離開畫面時移除 class，這樣下次滑到就又會重新播放動畫
             e.target.classList.remove('visible'); 
         }
       });
@@ -667,7 +671,7 @@
         input.addEventListener('wheel', e => e.preventDefault(), { passive: false });
     });
 
-    // 6. 表單送出與防護機制
+    // 6. 表單送出：【同時雙引擎並發發送】
     const bookingForm = document.getElementById('booking-form');
     const submitBtn = document.getElementById('submit-btn');
     const btnText = document.getElementById('btn-text');
@@ -675,21 +679,17 @@
     bookingForm.addEventListener('submit', function(event) {
         event.preventDefault(); 
         
-        // 【新增防護】：防止狂刷表單 (一日上限 3 次)
+        // 防護：防止狂刷表單 (一日上限 3 次)
         const today = new Date().toLocaleDateString();
         let rateLimitData = JSON.parse(localStorage.getItem('bookingRateLimit') || '{}');
         
-        // 檢查是否過了一天，是的話歸零
         if (rateLimitData.date !== today) {
             rateLimitData = { date: today, count: 0 };
         }
-        
-        // 檢查今日發送次數
         if (rateLimitData.count >= 3) {
             alert('【系統提示】\n系統偵測到您今日已發送多次預約。\n為確保服務品質，請您直接來電：(02) 2345-6789\n我們將由專人立即為您安排，感謝您的配合！');
             return;
         }
-        
         if (window.location.protocol === 'file:') {
             alert('【開發者提示】偵測到本地端 (file:///) 測試。已攔截送出，請上傳至伺服器後再進行真實測試！');
             return;
@@ -704,9 +704,8 @@
             return;
         }
 
-        // 【新增】：動態設定信件主旨，防止 Gmail 把信件全部折疊在一起
+        // 動態設定 FormSubmit 信件主旨，防止 Gmail 將不同家長的信件合併
         const studentName = document.getElementById('student-name').value.trim();
-        // 加入當下精準的毫秒時間戳記，確保每封信主旨絕對唯一
         const uniqueTime = new Date().getTime(); 
         document.getElementById('email-subject').value = `[預約] ${studentName} 的諮詢資料 - ${uniqueTime}`;
 
@@ -716,39 +715,83 @@
         submitBtn.disabled = true;
 
         const formData = new FormData(bookingForm);
+        
+        const templateParams = {
+            學生姓名: studentName,
+            家長姓名: document.getElementById('parent-name').value.trim(),
+            就讀年級: document.getElementById('student-grade').value,
+            LINE_ID: lineInput,
+            email: emailInput,
+            家長電話: phoneInput,
+            提供成績: document.querySelector('input[name="提供成績"]:checked').value,
+            成績_國文: document.querySelector('input[name="成績_國文"]').value || '',
+            成績_英文: document.querySelector('input[name="成績_英文"]').value || '',
+            成績_數學: document.querySelector('input[name="成績_數學"]').value || '',
+            成績_社會: document.querySelector('input[name="成績_社會"]').value || '',
+            成績_自然: document.querySelector('input[name="成績_自然"]').value || '',
+            家長留言: document.getElementById('parent-message').value.trim(),
+            Sender_IP: document.getElementById('sender-ip').value
+        };
 
-        fetch('https://formsubmit.co/ajax/78robot001@gmail.com', {
+        // 啟動 EmailJS 寄信流程
+        const emailJSPromise = emailjs.send('service_ijz82jw', 'template_r8072iw', templateParams)
+            .then(() => {
+                // 補習班收件成功後，如果有填寫信箱，背景發送家長感謝信
+                if (templateParams.email !== '') {
+                    emailjs.send('service_ijz82jw', 'template_ecpp15w', templateParams)
+                           .catch(err => console.log('EmailJS 家長回覆信發送失敗', err));
+                }
+                return true;
+            })
+            .catch(error => {
+                console.error('EmailJS 補習班通知信發送失敗:', error);
+                return false;
+            });
+
+        // 啟動 FormSubmit 寄信流程
+        const formSubmitPromise = fetch('https://formsubmit.co/ajax/78robot001@gmail.com', {
             method: 'POST',
             body: formData,
             headers: { 'Accept': 'application/json' }
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('伺服器連線異常');
-            }
-            return response.json();
-        })
+        .then(res => res.json())
         .then(data => {
             if (data.success === "true" || data.success === true) {
-                // 送出成功，計數器 +1 並存回瀏覽器
-                rateLimitData.count += 1;
-                localStorage.setItem('bookingRateLimit', JSON.stringify(rateLimitData));
-
-                alert('表單已成功送出！若您有留下電子信箱，系統將自動寄發確認信。我們將盡快由專員與您聯繫。');
-                bookingForm.reset(); 
-                scoreDetails.style.display = 'none'; 
+                return true;
             } else {
-                throw new Error('API 拒絕了此請求');
+                return false;
             }
         })
         .catch(error => {
-            console.error('表單送出失敗紀錄:', error);
-            alert('【系統提示】\n很抱歉，表單目前無法成功送出。\n這可能是系統繁忙或網路連線不穩所導致。\n\n請您直接來電：(02) 2345-6789\n我們將由專人立即為您服務，感謝您的耐心！');
-        })
-        .finally(() => {
-            btnText.innerText = originalBtnText;
-            submitBtn.disabled = false;
+            console.error('FormSubmit 發送失敗:', error);
+            return false;
         });
+
+        // 等待兩套引擎同時處理完畢
+        Promise.all([emailJSPromise, formSubmitPromise])
+            .then((results) => {
+                const isEmailJSSuccess = results[0];
+                const isFormSubmitSuccess = results[1];
+
+                // 只要有任何一個系統發送成功，就認定為預約成功
+                if (isEmailJSSuccess || isFormSubmitSuccess) {
+                    rateLimitData.count += 1;
+                    localStorage.setItem('bookingRateLimit', JSON.stringify(rateLimitData));
+
+                    alert('表單已成功送出！若您有留下電子信箱，系統將寄發確認信給您。\n我們將盡快由專員與您聯繫。');
+                    bookingForm.reset(); 
+                    scoreDetails.style.display = 'none'; 
+                } else {
+                    throw new Error('雙引擎皆發送失敗');
+                }
+            })
+            .catch(error => {
+                alert('【系統提示】\n很抱歉，表單目前無法成功送出。\n這可能是系統繁忙或網路連線不穩所導致。\n\n請您直接來電：(02) 2345-6789\n我們將由專人立即為您服務，感謝您的耐心！');
+            })
+            .finally(() => {
+                btnText.innerText = originalBtnText;
+                submitBtn.disabled = false;
+            });
     });
   });
 </script>
