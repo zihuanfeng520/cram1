@@ -535,7 +535,7 @@
               <input type="email" id="contact-email" name="email" placeholder="您的電子信箱 (必填)" required>
           </div>
           <div style="margin-bottom: 12px;">
-              <input type="tel" id="contact-phone" name="家長電話" placeholder="家長聯絡電話 (必填，例如: 0912-345-678)" required>
+              <input type="tel" id="contact-phone" name="家長電話" placeholder="家長聯絡電話 (必填，例如: 0912345678)" required>
           </div>
           <div>
               <input type="text" id="contact-line" name="LINE_ID" placeholder="您的 LINE ID (選填)">
@@ -760,6 +760,15 @@
             alert('請務必提供「電子信箱」與「家長電話」，以便我們與您聯繫！');
             return;
         }
+
+        // --- 新增檢查：電話格式必須為 10 碼數字 ---
+        const phoneRegex = /^\d{10}$/;
+        if (!phoneRegex.test(phoneInput)) {
+            alert('【格式錯誤】電話號碼必須為 10 碼數字（例如：0912345678），請重新輸入！');
+            document.getElementById('contact-phone').focus();
+            return;
+        }
+        // ----------------------------------------
 
         // 動態設定 FormSubmit 信件主旨，防止 Gmail 將不同家長的信件合併
         const studentName = document.getElementById('student-name').value.trim();
