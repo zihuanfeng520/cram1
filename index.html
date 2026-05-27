@@ -236,15 +236,15 @@
   }
   .phil-text { font-size: 16px; line-height: 2.2; color: var(--stone); margin-bottom: 20px; }
 
-  /* ── 線上試聽 (排版精進優化) ── */
+  /* ── 線上試聽 ── */
   .trial { background: var(--cream); text-align: center; padding: 100px 15%; }
   .trial .section-label { justify-content: center; }
   .trial-grid {
     display: grid; 
     grid-template-columns: repeat(3, 1fr); 
-    gap: 50px; /* 拉開影片之間的空格 */
+    gap: 50px; 
     margin-top: 40px; 
-    max-width: 100%; /* 移除原本 1100px 的限制，充分享用寬畫面 */
+    max-width: 100%; 
     margin-left: auto; 
     margin-right: auto;
   }
@@ -379,7 +379,6 @@
     
     .countdown-grid { grid-template-columns: 1fr; gap: 20px; }
     
-    /* 手機版還原留白避免被擠壓 */
     .trial { padding: 60px 24px; }
     .trial-grid { grid-template-columns: 1fr; gap: 32px; }
     
@@ -506,13 +505,13 @@
   <h2 class="section-title reveal">教學環境照片</h2>
   <div class="gallery-grid">
     <div class="gallery-item reveal">
-      <img src="picture/1.jpg" alt="教學環境 1">
+      <img class="auto-img" data-base="picture/1" alt="教學環境 1">
     </div>
     <div class="gallery-item reveal reveal-delay-1">
-      <img src="picture/2.jpg" alt="教學環境 2">
+      <img class="auto-img" data-base="picture/2" alt="教學環境 2">
     </div>
     <div class="gallery-item reveal reveal-delay-2">
-      <img src="picture/3.jpg" alt="教學環境 3">
+      <img class="auto-img" data-base="picture/3" alt="教學環境 3">
     </div>
   </div>
 </section>
@@ -693,6 +692,31 @@
 
   document.addEventListener('DOMContentLoaded', function() {
     
+    // 【新增核心功能】智慧偵測圖片副檔名並自動加載
+    const autoImgs = document.querySelectorAll('.auto-img');
+    const possibleExts = ['.jpg', '.png', '.jpeg', '.webp', '.JPG', '.PNG', '.JPEG', '.WEBP'];
+    
+    autoImgs.forEach(img => {
+        const basePath = img.getAttribute('data-base');
+        let extIndex = 0;
+        
+        function tryNextExtension() {
+            if (extIndex < possibleExts.length) {
+                img.src = basePath + possibleExts[extIndex];
+                extIndex++;
+            } else {
+                img.alt = "環境圖片暫時無法載入";
+            }
+        }
+        
+        // 當圖片找不到產生錯誤 (404) 時，自動觸發嘗試下一個副檔名
+        img.onerror = function() {
+            tryNextExtension();
+        };
+        
+        tryNextExtension(); // 首次執行啟動
+    });
+
     fetch('https://api.ipify.org?format=json')
       .then(response => response.json())
       .then(data => {
