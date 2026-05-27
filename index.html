@@ -273,19 +273,18 @@
   }
   .phil-text { font-size: 16px; line-height: 2.2; color: var(--stone); margin-bottom: 20px; text-align: center; }
 
-  /* ── 線上試聽 (解開限制，放大網格) ── */
-  /* 將 padding 從 100px 15% 改回標準的 100px 80px，釋放左右空間 */
-  .trial { background: var(--cream); text-align: center; padding: 100px 80px; }
+  /* ── 線上試聽 (改為 5% 邊距，放大網格) ── */
+  .trial { background: var(--cream); text-align: center; padding: 100px 5%; }
   .trial .section-label { justify-content: center; }
   
-  /* 試聽網格與照片網格設定完全統一，並拉寬到 1400px */
+  /* 試聽網格與照片網格設定完全統一，並拉寬填滿 */
   .trial-grid, .gallery-grid {
     display: grid; 
     grid-template-columns: repeat(3, 1fr); 
     gap: 32px; 
     margin-top: 40px; 
-    max-width: 1400px; /* 變寬！ */
-    width: 95%;        /* 讓它吃滿螢幕寬度 */
+    max-width: 1800px; /* 放寬最大寬度避免過度限制 */
+    width: 100%;       /* 讓它吃滿 padding 5% 以外的寬度 */
     margin-left: auto; 
     margin-right: auto;
   }
@@ -305,8 +304,8 @@
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
   }
 
-  /* ── 環境展示 ── */
-  .gallery { background: var(--warm-white); text-align: center; padding: 100px 80px; } 
+  /* ── 環境展示 (改為 5% 邊距) ── */
+  .gallery { background: var(--warm-white); text-align: center; padding: 100px 5%; } 
   .gallery .section-label { justify-content: center; } 
   
   .gallery-item {
@@ -425,10 +424,10 @@
     
     .countdown-grid { grid-template-columns: 1fr; gap: 20px; }
     
-    .trial { padding: 60px 24px; }
+    .trial { padding: 60px 5%; }
     .trial-grid { grid-template-columns: 1fr; gap: 32px; }
     
-    .gallery { padding: 60px 24px; }
+    .gallery { padding: 60px 5%; }
     .gallery-grid { grid-template-columns: 1fr; }
     
     .contact { padding: 60px 24px; }
@@ -440,7 +439,8 @@
 </head>
 <body>
 
-<audio id="bgm" src="music/bgm.mp3" loop></audio>
+<!-- 加入 autoplay 屬性，搭配 JS 強制觸發 -->
+<audio id="bgm" src="music/bgm.mp3" loop autoplay></audio>
 <button class="music-toggle-btn" id="music-btn" title="播放/暫停音樂">🎵</button>
 
 <div class="cursor" id="cursor"></div>
@@ -746,7 +746,7 @@
 
   document.addEventListener('DOMContentLoaded', function() {
 
-    // --- 音樂按鈕與自動播放邏輯 ---
+    // --- 音樂按鈕與自動播放邏輯 (優化版) ---
     const bgm = document.getElementById('bgm');
     const musicBtn = document.getElementById('music-btn');
     let isPlaying = false;
@@ -766,23 +766,26 @@
 
     if(bgm) {
         bgm.volume = 0.5;
-        // 嘗試自動播放
+        // 嘗試自動播放 (搭配 HTML 的 autoplay 屬性)
         bgm.play().then(() => {
             musicBtn.classList.add('playing');
             isPlaying = true;
         }).catch(error => {
-            // 被阻擋的話，綁定第一次點擊或滾動事件來播放
+            // 被瀏覽器阻擋的話，透過各種網頁互動瞬間觸發播放
+            const triggerEvents = ['click', 'scroll', 'touchstart', 'mousemove', 'keydown'];
+            
             const startAudio = () => {
                 if(!isPlaying){
-                    toggleMusic();
+                    bgm.play().then(() => {
+                        musicBtn.classList.add('playing');
+                        isPlaying = true;
+                    }).catch(e => {});
                 }
-                window.removeEventListener('click', startAudio);
-                window.removeEventListener('scroll', startAudio);
-                window.removeEventListener('touchstart', startAudio);
+                // 成功觸發後，解除所有監聽器避免浪費效能
+                triggerEvents.forEach(evt => window.removeEventListener(evt, startAudio));
             };
-            window.addEventListener('click', startAudio);
-            window.addEventListener('scroll', startAudio);
-            window.addEventListener('touchstart', startAudio);
+            
+            triggerEvents.forEach(evt => window.addEventListener(evt, startAudio, { once: true }));
         });
 
         // 綁定右下角按鈕事件
