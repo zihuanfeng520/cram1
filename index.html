@@ -190,21 +190,40 @@
   .countdown-section { background: var(--ink); color: var(--warm-white); text-align: center; position: relative; overflow: hidden; }
   .countdown-section .section-label { justify-content: center; }
   .countdown-section .section-title { color: var(--warm-white); margin-bottom: 48px; }
-  .countdown-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1000px; margin-left: auto; margin-right: auto; }
+  
+  /* 鋪開佈局：加大最大寬度並設定合適間距，確保橫向空間充足 */
+  .countdown-grid { 
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 32px; 
+    max-width: 1400px; 
+    width: 95%;
+    margin-left: auto; 
+    margin-right: auto; 
+  }
+  /* 讓格子左右留白稍微縮小，把寬度留給內部的數字 */
   .cd-box { 
-    background: rgba(255,255,255,0.03); padding: 50px 10px; border-radius: 8px; 
-    border: 1px solid rgba(201,168,76,.2); transition: transform .3s, border-color .3s;
+    background: rgba(255,255,255,0.03); 
+    padding: 50px 10px; 
+    border-radius: 8px; 
+    border: 1px solid rgba(201,168,76,.2); 
+    transition: transform .3s, border-color .3s;
   }
   .cd-box:hover { transform: translateY(-5px); border-color: var(--gold); }
   
-  .cd-title { font-size: 32px; font-weight: 900; letter-spacing: 6px; color: var(--gold); margin-bottom: 28px; }
+  .cd-title { font-size: 26px; font-weight: 900; letter-spacing: 4px; color: var(--gold); margin-bottom: 28px; }
   
+  /* 強制單行顯示：加入 flex-wrap: nowrap 與 white-space: nowrap */
   .cd-time { 
-    display: flex; align-items: baseline; justify-content: center; flex-wrap: wrap;
+    display: flex; align-items: baseline; justify-content: center; 
+    flex-wrap: nowrap; 
+    white-space: nowrap;
     font-family: 'Noto Sans TC', sans-serif; line-height: 1;
   }
+  
+  /* 天、時、分 的數字維持適中大小 */
   .cd-time span {
-    font-size: clamp(40px, 5vw, 64px);
+    font-size: clamp(32px, 3.5vw, 52px);
     font-weight: 900;
     color: #ff5252;
     text-shadow: 0 0 16px rgba(255, 82, 82, 0.5);
@@ -217,12 +236,15 @@
     font-weight: 400;
     margin-right: 12px;
   }
+  
+  /* 只有「秒數」獨立放大，呈現緊迫感 */
   .cd-time span.sec {
+    font-size: clamp(48px, 6vw, 82px);
     animation: heartbeat 1s infinite;
   }
   @keyframes heartbeat {
     0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.08); opacity: 0.8; }
+    50% { transform: scale(1.04); opacity: 0.8; }
   }
 
   /* ── 教學理念 (Philosophy) ── */
@@ -437,15 +459,15 @@
   <h2 class="section-title reveal">目標就在眼前</h2>
   <div class="countdown-grid">
     <div class="cd-box reveal">
-      <div class="cd-title">會考</div>
+      <div class="cd-title">國中會考</div>
       <div class="cd-time" id="cd-huikao">--</div>
     </div>
     <div class="cd-box reveal reveal-delay-1">
-      <div class="cd-title">學測</div>
+      <div class="cd-title">大學學測</div>
       <div class="cd-time" id="cd-xuece">--</div>
     </div>
     <div class="cd-box reveal reveal-delay-2">
-      <div class="cd-title">分科</div>
+      <div class="cd-title">分科測驗</div>
       <div class="cd-time" id="cd-fenke">--</div>
     </div>
   </div>
@@ -692,7 +714,6 @@
 
   document.addEventListener('DOMContentLoaded', function() {
     
-    // 【新增核心功能】智慧偵測圖片副檔名並自動加載
     const autoImgs = document.querySelectorAll('.auto-img');
     const possibleExts = ['.jpg', '.png', '.jpeg', '.webp', '.JPG', '.PNG', '.JPEG', '.WEBP'];
     
@@ -709,12 +730,11 @@
             }
         }
         
-        // 當圖片找不到產生錯誤 (404) 時，自動觸發嘗試下一個副檔名
         img.onerror = function() {
             tryNextExtension();
         };
         
-        tryNextExtension(); // 首次執行啟動
+        tryNextExtension(); 
     });
 
     fetch('https://api.ipify.org?format=json')
