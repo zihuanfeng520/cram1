@@ -54,7 +54,7 @@
     a:hover ~ .cursor, button:hover ~ .cursor, input:hover ~ .cursor, select:hover ~ .cursor { width: 16px; height: 16px; }
   }
 
-  /* ── 漂浮音樂按鈕 ── */
+  /* ── 漂浮音樂按鈕 (修改為光暈特效) ── */
   .music-toggle-btn {
     position: fixed; bottom: 30px; right: 30px; z-index: 9999;
     width: 50px; height: 50px; border-radius: 50%;
@@ -66,8 +66,13 @@
     transition: transform 0.3s, background 0.3s;
   }
   .music-toggle-btn:hover { transform: scale(1.1); background: var(--deep); }
-  .music-toggle-btn.playing { animation: spin 4s linear infinite; }
-  @keyframes spin { 100% { transform: rotate(360deg); } }
+  .music-toggle-btn.playing { animation: pulseGlow 2s infinite; }
+  
+  @keyframes pulseGlow {
+    0% { box-shadow: 0 0 5px rgba(201,168,76,0.3); }
+    50% { box-shadow: 0 0 20px rgba(201,168,76,0.8); }
+    100% { box-shadow: 0 0 5px rgba(201,168,76,0.3); }
+  }
 
   /* ── 導覽列 (Navbar) ── */
   nav {
@@ -97,7 +102,6 @@
     content: ''; position: absolute; inset: 3px;
     border-radius: 50%; border: 1.5px solid var(--gold); z-index: 2; pointer-events: none;
   }
-  /* 動態 Logo 圖片設定 */
   .logo-mark img {
     width: 100%; height: 100%; object-fit: cover; z-index: 1; border-radius: 50%;
   }
@@ -142,7 +146,7 @@
     text-align: center;
   }
   .hero::before {
-    content: '銘'; /* 背景浮水印改為銘 */
+    content: '銘';
     position: absolute; left: 50%; top: 50%;
     transform: translate(-50%, -50%);
     font-family: 'Noto Serif TC', serif;
@@ -185,8 +189,6 @@
   .btn-primary:hover::before { transform: translateX(0); }
   .btn-primary:hover { color: var(--ink); }
   .btn-primary span { position: relative; z-index: 1; }
-  .btn-primary:disabled { background: #555; color: #888; cursor: not-allowed; }
-  .btn-primary:disabled::before { display: none; }
 
   /* ── 裝飾分隔線 ── */
   .ornament-divider { text-align: center; padding: 40px 0; color: var(--gold); letter-spacing: 20px; font-size: 18px; opacity: .6; }
@@ -273,20 +275,19 @@
   }
   .phil-text { font-size: 16px; line-height: 2.2; color: var(--stone); margin-bottom: 20px; text-align: center; }
 
-  /* ── 線上試聽 (改為 5% 邊距，放大網格) ── */
-  .trial { background: var(--cream); text-align: center; padding: 100px 5%; }
-  .trial .section-label { justify-content: center; }
+  /* ── 線上試聽 & 環境展示 (完美平分版面設計) ── */
+  .trial { background: var(--cream); text-align: center; padding: 100px 4vw; }
+  .gallery { background: var(--warm-white); text-align: center; padding: 100px 4vw; } 
   
-  /* 試聽網格與照片網格設定完全統一，並拉寬填滿 */
+  .trial .section-label, .gallery .section-label { justify-content: center; }
+  
   .trial-grid, .gallery-grid {
     display: grid; 
     grid-template-columns: repeat(3, 1fr); 
-    gap: 32px; 
+    gap: 4vw; 
     margin-top: 40px; 
-    max-width: 1800px; /* 放寬最大寬度避免過度限制 */
-    width: 100%;       /* 讓它吃滿 padding 5% 以外的寬度 */
-    margin-left: auto; 
-    margin-right: auto;
+    width: 100%;       
+    max-width: none;  
   }
 
   .trial-item { text-align: left; }
@@ -303,10 +304,6 @@
   .video-container iframe {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
   }
-
-  /* ── 環境展示 (改為 5% 邊距) ── */
-  .gallery { background: var(--warm-white); text-align: center; padding: 100px 5%; } 
-  .gallery .section-label { justify-content: center; } 
   
   .gallery-item {
     border-radius: 8px; 
@@ -316,7 +313,7 @@
   .gallery-item img {
     width: 100%; 
     height: auto;
-    aspect-ratio: 16 / 9; /* 鎖定 16:9，與 YouTube 影片完全一樣大 */
+    aspect-ratio: 16 / 9;
     object-fit: cover; 
     display: block;
     transition: transform 0.6s cubic-bezier(.23,1,.32,1);
@@ -344,7 +341,6 @@
     margin-top: 40px; border: 1px solid rgba(201,168,76,.2);
   }
 
-  /* 社群按鈕 */
   .social-links { display: flex; gap: 12px; margin-top: 24px; }
   .social-links a {
     width: 40px; height: 40px; border-radius: 50%; background: var(--ink); color: var(--gold);
@@ -353,7 +349,6 @@
   }
   .social-links a:hover { transform: translateY(-3px); background: var(--accent); color: var(--gold-light); }
 
-  /* 表單 UI 設計 */
   .contact-form {
     background: var(--warm-white); border-radius: 4px; padding: 48px;
     border: 1px solid rgba(138,125,107,.15);
@@ -428,7 +423,7 @@
     .trial-grid { grid-template-columns: 1fr; gap: 32px; }
     
     .gallery { padding: 60px 5%; }
-    .gallery-grid { grid-template-columns: 1fr; }
+    .gallery-grid { grid-template-columns: 1fr; gap: 32px; }
     
     .contact { padding: 60px 24px; }
     .contact-inner { grid-template-columns: 1fr; gap: 40px; }
@@ -439,9 +434,9 @@
 </head>
 <body>
 
-<!-- 加入 autoplay 屬性，搭配 JS 強制觸發 -->
-<audio id="bgm" src="music/bgm.mp3" loop autoplay></audio>
-<button class="music-toggle-btn" id="music-btn" title="播放/暫停音樂">🎵</button>
+<audio id="bgm" src="music/bgm.mp3" loop></audio>
+
+<button class="music-toggle-btn" id="music-btn" title="播放/暫停音樂">🔇</button>
 
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
@@ -668,7 +663,6 @@
 
         <div class="form-group">
           <label>聯絡方式 <span class="form-note">(*信箱與電話為必填，LINE 為選填)</span></label>
-          
           <div style="margin-bottom: 12px;">
               <input type="email" id="contact-email" name="email" placeholder="您的電子信箱 (必填)" required>
           </div>
@@ -686,7 +680,6 @@
               <label><input type="radio" name="提供成績" value="是" id="score-yes"> 是</label>
               <label><input type="radio" name="提供成績" value="否" id="score-no" checked> 否</label>
           </div>
-          
           <div class="score-fields" id="score-details">
               <p style="font-size: 13px; margin-bottom: 15px; color: var(--stone);">請填寫各科分數：</p>
               <div class="score-row"><label>國文</label><input type="number" name="成績_國文" placeholder="0~100分"></div>
@@ -739,14 +732,11 @@
 </footer>
 
 <script>
-  // 初始化 EmailJS
-  (function() {
-      emailjs.init("dq7BIkVjvv-cdhlu5");
-  })();
+  (function() { emailjs.init("dq7BIkVjvv-cdhlu5"); })();
 
   document.addEventListener('DOMContentLoaded', function() {
 
-    // --- 音樂按鈕與自動播放邏輯 (優化版) ---
+    // --- 音樂按鈕與全域互動解鎖機制 ---
     const bgm = document.getElementById('bgm');
     const musicBtn = document.getElementById('music-btn');
     let isPlaying = false;
@@ -754,10 +744,12 @@
     function toggleMusic() {
         if (isPlaying) {
             bgm.pause();
+            musicBtn.innerHTML = '🔇';
             musicBtn.classList.remove('playing');
             isPlaying = false;
         } else {
             bgm.play().then(() => {
+                musicBtn.innerHTML = '🔊';
                 musicBtn.classList.add('playing');
                 isPlaying = true;
             }).catch(e => console.log("等待使用者互動以播放音樂"));
@@ -766,37 +758,33 @@
 
     if(bgm) {
         bgm.volume = 0.5;
-        // 嘗試自動播放 (搭配 HTML 的 autoplay 屬性)
-        bgm.play().then(() => {
-            musicBtn.classList.add('playing');
-            isPlaying = true;
-        }).catch(error => {
-            // 被瀏覽器阻擋的話，透過各種網頁互動瞬間觸發播放
-            const triggerEvents = ['click', 'scroll', 'touchstart', 'mousemove', 'keydown'];
-            
-            const startAudio = () => {
-                if(!isPlaying){
-                    bgm.play().then(() => {
-                        musicBtn.classList.add('playing');
-                        isPlaying = true;
-                    }).catch(e => {});
-                }
-                // 成功觸發後，解除所有監聽器避免浪費效能
-                triggerEvents.forEach(evt => window.removeEventListener(evt, startAudio));
-            };
-            
-            triggerEvents.forEach(evt => window.addEventListener(evt, startAudio, { once: true }));
-        });
+        
+        // 將觸發事件鎖定在有效的「真實互動」上 (Click, Touch, Keydown)
+        const triggerEvents = ['click', 'touchstart', 'keydown'];
+        
+        const unlockAudio = () => {
+            if(!isPlaying){
+                bgm.play().then(() => {
+                    musicBtn.innerHTML = '🔊';
+                    musicBtn.classList.add('playing');
+                    isPlaying = true;
+                }).catch(e => { console.log("自動播放遭到瀏覽器拒絕", e); });
+            }
+            // 解鎖成功後移除監聽器，避免浪費效能
+            triggerEvents.forEach(evt => document.removeEventListener(evt, unlockAudio));
+        };
+        
+        // 只要使用者在網頁上隨便點擊一下、滑動手機或按鍵盤，就會自動播放
+        triggerEvents.forEach(evt => document.addEventListener(evt, unlockAudio, { once: true }));
 
         // 綁定右下角按鈕事件
         musicBtn.addEventListener('click', function(e) {
-            e.stopPropagation(); // 避免觸發 body click
+            e.stopPropagation(); // 避免干擾全域解鎖
             toggleMusic();
         });
     }
     // ---------------------------------
     
-    // 環境照片與 Logo Icon 的動態讀取邏輯
     const autoElements = document.querySelectorAll('.auto-img, .auto-icon');
     const possibleExts = ['.jpg', '.png', '.jpeg', '.webp', '.JPG', '.PNG', '.JPEG', '.WEBP'];
     
@@ -810,25 +798,19 @@
                 extIndex++;
             } else {
                 if(el.classList.contains('auto-icon')){
-                   el.style.display = 'none'; // 若真找不到 icon，隱藏破圖
+                   el.style.display = 'none'; 
                 } else {
                    el.alt = "環境圖片暫時無法載入";
                 }
             }
         }
-        
-        el.onerror = function() {
-            tryNextExtension();
-        };
-        
+        el.onerror = function() { tryNextExtension(); };
         tryNextExtension(); 
     });
 
     fetch('https://api.ipify.org?format=json')
       .then(response => response.json())
-      .then(data => {
-          if(data.ip) { document.getElementById('sender-ip').value = data.ip; }
-      })
+      .then(data => { if(data.ip) { document.getElementById('sender-ip').value = data.ip; } })
       .catch(error => console.log('IP 抓取略過'));
 
     const exams = [
@@ -885,22 +867,16 @@
 
     const mobileMenuBtn = document.getElementById('mobile-menu');
     const navMenu = document.getElementById('nav-menu');
-    mobileMenuBtn.addEventListener('click', function() {
-      navMenu.classList.toggle('active');
-    });
-    const navLinks = document.querySelectorAll('#nav-menu li a');
-    navLinks.forEach(link => {
+    mobileMenuBtn.addEventListener('click', function() { navMenu.classList.toggle('active'); });
+    document.querySelectorAll('#nav-menu li a').forEach(link => {
       link.addEventListener('click', () => navMenu.classList.remove('active'));
     });
 
     const reveals = document.querySelectorAll('.reveal');
     const io = new IntersectionObserver((entries) => {
       entries.forEach(e => {
-        if (e.isIntersecting) { 
-            e.target.classList.add('visible'); 
-        } else {
-            e.target.classList.remove('visible'); 
-        }
+        if (e.isIntersecting) { e.target.classList.add('visible'); } 
+        else { e.target.classList.remove('visible'); }
       });
     }, { threshold: 0.12 });
     reveals.forEach(el => io.observe(el));
@@ -915,13 +891,11 @@
     radioNo.addEventListener('change', function() {
         if (this.checked) {
             scoreDetails.style.display = 'none'; 
-            const inputs = scoreDetails.querySelectorAll('input');
-            inputs.forEach(input => input.value = '');
+            scoreDetails.querySelectorAll('input').forEach(input => input.value = '');
         }
     });
 
-    const numberInputs = document.querySelectorAll('input[type="number"]');
-    numberInputs.forEach(input => {
+    document.querySelectorAll('input[type="number"]').forEach(input => {
         input.addEventListener('wheel', e => e.preventDefault(), { passive: false });
     });
 
@@ -961,9 +935,7 @@
         const today = new Date().toLocaleDateString();
         let rateLimitData = JSON.parse(localStorage.getItem('bookingRateLimit') || '{}');
         
-        if (rateLimitData.date !== today) {
-            rateLimitData = { date: today, count: 0 };
-        }
+        if (rateLimitData.date !== today) { rateLimitData = { date: today, count: 0 }; }
         if (rateLimitData.count >= 3) {
             alert('【系統提示】\n系統偵測到您今日已發送多次預約。\n為確保服務品質，請您直接來電：(02) 2345-6789\n我們將由專人立即為您安排，感謝您的配合！');
             return;
@@ -1039,15 +1011,11 @@
             return res.json();
         })
         .then(data => {
-            if (data.success === "true" || data.success === true) {
-                return true;
-            } else {
-                console.error('FormSubmit 拒絕請求:', data);
-                return false;
-            }
+            if (data.success === "true" || data.success === true) { return true; } 
+            else { console.error('FormSubmit 拒絕請求:', data); return false; }
         })
         .catch(error => {
-            console.error('FormSubmit 連線錯誤 (可能是 CORS 或網路問題):', error);
+            console.error('FormSubmit 連線錯誤:', error);
             return false;
         });
 
@@ -1063,12 +1031,9 @@
                     alert('表單已成功送出！若您有留下電子信箱，系統將寄發確認信給您。\n我們將盡快由專員與您聯繫。');
                     bookingForm.reset(); 
                     scoreDetails.style.display = 'none'; 
-                    
                     grecaptcha.reset();
                     generateMathCaptcha();
-                } else {
-                    throw new Error('雙引擎皆發送失敗');
-                }
+                } else { throw new Error('雙引擎皆發送失敗'); }
             })
             .catch(error => {
                 alert('【系統提示】\n很抱歉，表單目前無法成功送出。\n這可能是系統繁忙或網路連線不穩所導致。\n\n請您直接來電：(02) 2345-6789\n我們將由專人立即為您服務，感謝您的耐心！');
