@@ -190,59 +190,88 @@
   .countdown-section { background: var(--ink); color: var(--warm-white); text-align: center; position: relative; overflow: hidden; }
   .countdown-section .section-label { justify-content: center; }
   .countdown-section .section-title { color: var(--warm-white); margin-bottom: 48px; }
+  
   .countdown-grid { 
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; 
-    max-width: 1400px; width: 95%; margin-left: auto; margin-right: auto; 
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 32px; 
+    max-width: 1400px; 
+    width: 95%;
+    margin-left: auto; 
+    margin-right: auto; 
   }
   .cd-box { 
-    background: rgba(255,255,255,0.03); padding: 50px 10px; border-radius: 8px; 
-    border: 1px solid rgba(201,168,76,.2); transition: transform .3s, border-color .3s;
+    background: rgba(255,255,255,0.03); 
+    padding: 50px 10px; /* 內距控制，留空間給大字體 */
+    border-radius: 8px; 
+    border: 1px solid rgba(201,168,76,.2); 
+    transition: transform .3s, border-color .3s;
   }
   .cd-box:hover { transform: translateY(-5px); border-color: var(--gold); }
-  .cd-title { font-size: 26px; font-weight: 900; letter-spacing: 4px; color: var(--gold); margin-bottom: 28px; }
+  
+  .cd-title { font-size: 32px; font-weight: 900; letter-spacing: 6px; color: var(--gold); margin-bottom: 28px; }
+  
+  /* 【修改：天時分變小、秒數變大，強制不換行】 */
   .cd-time { 
-    display: flex; align-items: baseline; justify-content: center; flex-wrap: wrap;
-    font-family: 'Playfair Display', serif; margin-top: 15px; line-height: 1.2;
+    display: flex; align-items: baseline; justify-content: center; 
+    flex-wrap: nowrap; /* 強制不准換行 */
+    white-space: nowrap; /* 強制文字不折行 */
+    font-family: 'Noto Sans TC', sans-serif; line-height: 1;
   }
+  
+  /* 天、時、分 的數字縮小 */
   .cd-time span {
-    font-size: 56px; font-weight: 900; color: #ff5252; 
-    text-shadow: 0 0 16px rgba(255, 82, 82, 0.5); margin: 0 5px;
+    font-size: clamp(28px, 2.5vw, 38px); /* 縮小了 */
+    font-weight: 900;
+    color: #ff5252;
+    text-shadow: 0 0 12px rgba(255, 82, 82, 0.5);
+    margin: 0 3px 0 0;
+    font-family: 'Playfair Display', sans-serif;
   }
-  .cd-time span.sec { font-size: 72px; animation: heartbeat 1s infinite; }
   .cd-time small {
-    font-size: 16px; color: var(--stone-light);
-    font-family: 'Noto Sans TC', sans-serif; font-weight: 400;
+    font-size: 14px;
+    color: var(--stone-light);
+    font-weight: 400;
+    margin-right: 8px; /* 減少單位右側的距離，節省空間 */
+  }
+  
+  /* 只有「秒數」獨立放大，呈現極致緊迫感 */
+  .cd-time span.sec {
+    font-size: clamp(56px, 5.5vw, 76px); /* 極大化 */
+    margin-left: 4px;
+    animation: heartbeat 1s infinite;
   }
   @keyframes heartbeat {
     0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.04); opacity: 0.8; }
+    50% { transform: scale(1.08); opacity: 0.8; }
   }
 
-  /* ── 教學理念 (Philosophy) 【修改：內容置中對齊】 ── */
-  .philosophy { background: var(--warm-white); text-align: center; } /* 區塊置中 */
-  .philosophy .section-label { justify-content: center; } /* 標籤置中 */
+  /* ── 教學理念 (Philosophy) ── */
+  .philosophy { background: var(--warm-white); text-align: center; } 
+  .philosophy .section-label { justify-content: center; } 
   .phil-content {
     max-width: 900px; margin: 40px auto 0; position: relative; z-index: 1;
   }
   .phil-quote {
     font-family: 'Playfair Display', serif; font-style: italic; font-size: 28px;
     color: var(--gold); line-height: 1.7; margin-bottom: 32px; 
-    border-left: none; /* 移除左邊金線 */
-    padding-left: 0;   /* 移除左邊內距 */
+    border-left: none; 
+    padding-left: 0;   
   }
   .phil-text { font-size: 16px; line-height: 2.2; color: var(--stone); margin-bottom: 20px; text-align: center; }
 
-  /* ── 線上試聽 (Online Trial) ── */
-  .trial { background: var(--cream); text-align: center; padding: 100px 15%; }
+  /* ── 線上試聽 ── */
+  /* 【修改：移除左右內距擠壓，讓影片變大】 */
+  .trial { background: var(--cream); text-align: center; }
   .trial .section-label { justify-content: center; }
   
-  /* ── 【修改】：試聽網格與照片網格設定完全統一 ── */
+  /* ── 試聽網格與照片網格設定完全統一、放大 ── */
   .trial-grid, .gallery-grid {
     display: grid; 
     grid-template-columns: repeat(3, 1fr); 
-    gap: 30px; 
+    gap: 32px; 
     margin-top: 40px; 
-    max-width: 1100px; 
+    max-width: 1200px; /* 拉大寬度，讓影片與照片更具震撼力 */
     margin-left: auto; 
     margin-right: auto;
   }
@@ -252,9 +281,8 @@
     font-size: 18px; color: var(--ink); margin-bottom: 16px; 
     border-left: 3px solid var(--gold); padding-left: 12px; letter-spacing: 1px;
   }
-  /* 影片容器：維持 16:9 比例 (56.25%) */
   .video-container {
-    position: relative; padding-bottom: 56.25%; 
+    position: relative; padding-bottom: 56.25%; /* 16:9 */
     height: 0; overflow: hidden; border-radius: 8px;
     box-shadow: 0 10px 30px rgba(0,0,0,.08);
     border: 1px solid rgba(201,168,76,.1);
@@ -263,21 +291,19 @@
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
   }
 
-  /* ── 環境展示 (Gallery) 【修改：標題置中與圖片比例統一】 ── */
-  .gallery { background: var(--warm-white); text-align: center; } /* 標題置中 */
-  .gallery .section-label { justify-content: center; } /* 標籤置中 */
+  /* ── 環境展示 ── */
+  .gallery { background: var(--warm-white); text-align: center; } 
+  .gallery .section-label { justify-content: center; } 
   
   .gallery-item {
-    border-radius: 8px; /* 稍微圓角跟影片一致 */
+    border-radius: 8px; 
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0,0,0,0.05);
   }
-  
-  /* 【修改】：將照片強制鎖定為 16:9 比例，與 YouTube 影片完全一樣大 */
   .gallery-item img {
     width: 100%; 
     height: auto;
-    aspect-ratio: 16 / 9; /* 國際標準 16:9 */
+    aspect-ratio: 16 / 9; /* 鎖定 16:9，與 YouTube 影片完全一樣大 */
     object-fit: cover; 
     display: block;
     transition: transform 0.6s cubic-bezier(.23,1,.32,1);
@@ -384,10 +410,7 @@
     section { padding: 60px 24px; }
     
     .countdown-grid { grid-template-columns: 1fr; gap: 20px; }
-    
-    .trial { padding: 60px 24px; }
     .trial-grid { grid-template-columns: 1fr; gap: 32px; }
-    
     .gallery-grid { grid-template-columns: 1fr; }
     
     .contact-inner { grid-template-columns: 1fr; gap: 40px; }
@@ -445,15 +468,15 @@
   <h2 class="section-title reveal">目標就在眼前</h2>
   <div class="countdown-grid">
     <div class="cd-box reveal">
-      <div class="cd-title">國中會考</div>
+      <div class="cd-title">會考</div>
       <div class="cd-time" id="cd-huikao">--</div>
     </div>
     <div class="cd-box reveal reveal-delay-1">
-      <div class="cd-title">大學學測</div>
+      <div class="cd-title">學測</div>
       <div class="cd-time" id="cd-xuece">--</div>
     </div>
     <div class="cd-box reveal reveal-delay-2">
-      <div class="cd-title">分科測驗</div>
+      <div class="cd-title">分科</div>
       <div class="cd-time" id="cd-fenke">--</div>
     </div>
   </div>
@@ -700,15 +723,12 @@
 
   document.addEventListener('DOMContentLoaded', function() {
 
-    // --- 新增：背景音樂自動播放邏輯 ---
     const bgm = document.getElementById('bgm');
     if(bgm) {
-        bgm.volume = 0.5; // 設定音量為 50% 避免太大聲
-        // 嘗試自動播放
+        bgm.volume = 0.5; 
         const playPromise = bgm.play();
         if (playPromise !== undefined) {
             playPromise.catch(error => {
-                // 若瀏覽器阻擋自動播放，則等待使用者的第一次互動再播放
                 const startAudio = () => {
                     bgm.play();
                     window.removeEventListener('click', startAudio);
@@ -721,7 +741,6 @@
             });
         }
     }
-    // ---------------------------------
     
     const autoImgs = document.querySelectorAll('.auto-img');
     const possibleExts = ['.jpg', '.png', '.jpeg', '.webp', '.JPG', '.PNG', '.JPEG', '.WEBP'];
@@ -771,6 +790,7 @@
                     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                     const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                    // 【這裡的 HTML 也一併做調整】
                     el.innerHTML = `
                         <span>${days}</span><small>天</small>
                         <span>${hours}</span><small>時</small>
@@ -1004,3 +1024,4 @@
 </script>
 </body>
 </html>
+}
