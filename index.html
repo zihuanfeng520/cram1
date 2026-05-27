@@ -3,11 +3,51 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>銘銘文理 | 專業升學補習班</title>
+<script>
+  const SITE_CONFIG = {
+    // 1. 網站基本資訊
+    pageTitle: "銘銘文理 | 專業升學補習班",   // 網頁標籤上的標題
+    brandName: "銘銘文理",                 // 補習班中文名稱
+    brandNameEn: "Ming Ming Education",    // 補習班英文名稱
+
+    // 2. 首頁主視覺文字
+    heroSlogan: "引領學習<br>成就<em>非凡</em>",
+    heroDesc: "為每一位學生量身打造專屬的學習藍圖，我們不只教授知識，更培養獨立思考的能力。",
+
+    // 3. 倒數計時日期 (格式：YYYY-MM-DDTHH:mm:ss)
+    examHuikao: "2027-05-15T08:00:00", // 國中會考日期
+    examXuece: "2027-01-22T08:00:00",  // 大學學測日期
+    examFenke: "2026-07-12T08:00:00",  // 分科測驗日期
+
+    // 4. 線上試聽 YouTube 影片 ID 
+    // 請填入網址 v= 後面的英數字。例如 https://youtu.be/hmx0ALRPPhg，請填入 hmx0ALRPPhg
+    videoEnglish: "y4df14N9aKY", // 英文專區影片
+    videoMath: "hmx0ALRPPhg",    // 數學專區影片
+    videoScience: "6F72YyIBPLY", // 自然專區影片
+
+    // 5. 聯絡資訊
+    address: "新北市新莊區民安路205號",
+    phone: "(02) 2345-6789",
+    email: "service@mingming-edu.com.tw",
+    businessHours: "週一至週五 14:00 - 22:00<br>週六 09:00 - 18:00", // <br> 是換行符號
+    lineUrl: "https://line.me/ti/p/你的LINE網址",
+    fbUrl: "https://www.facebook.com/你的臉書粉專網址",
+    googleMapIframeSrc: "https://maps.google.com/maps?q=新北市福營國中&t=&z=15&ie=UTF8&iwloc=&output=embed",
+    footerDesc: "致力提供最優質的教育環境，以嚴謹的態度與溫暖的關懷，陪伴每一位學生走向人生的高峰。",
+
+    // 6. 表單與系統 API 串接設定 (工程師或進階使用者修改)
+    formSubmitEmail: "78robot001@gmail.com",                  // FormSubmit 收件信箱
+    emailjsPublicKey: "dq7BIkVjvv-cdhlu5",                    // EmailJS Public Key
+    emailjsServiceId: "service_ijz82jw",                      // EmailJS Service ID
+    emailjsTemplateAdmin: "template_r8072iw",                 // EmailJS 補習班通知信 Template ID
+    emailjsTemplateClient: "template_ecpp15w",                // EmailJS 家長回覆信 Template ID
+    recaptchaSiteKey: "6LeCLP4sAAAAAIhxXn_hjOCa4Fe4wfjHDpcTaFcm" // Google reCAPTCHA Site Key
+  };
+</script>
+<title>載入中...</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;700;900&family=Noto+Sans+TC:wght@300;400;500&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 <style>
   /* ── 變數與基礎設定 ── */
@@ -444,11 +484,11 @@
 <nav id="navbar">
   <a href="#" class="logo">
     <div class="logo-mark">
-      <img class="auto-icon" data-base="picture/icon" alt="銘">
+      <img class="auto-icon" data-base="picture/icon" alt="Logo">
     </div>
     <div class="logo-text">
-      <strong>銘銘文理</strong>
-      <em>Ming Ming Education</em>
+      <strong class="conf-brand-name">銘銘文理</strong>
+      <em class="conf-brand-en">Ming Ming Education</em>
     </div>
   </a>
   <div class="menu-toggle" id="mobile-menu">☰</div>
@@ -467,8 +507,8 @@
       <span></span>
       <p>Professional Tutoring Center</p>
     </div>
-    <h1 class="reveal reveal-delay-1">引領學習<br>成就<em>非凡</em></h1>
-    <p class="hero-desc reveal reveal-delay-2">
+    <h1 class="reveal reveal-delay-1" id="conf-hero-slogan">引領學習<br>成就<em>非凡</em></h1>
+    <p class="hero-desc reveal reveal-delay-2" id="conf-hero-desc">
       為每一位學生量身打造專屬的學習藍圖，我們不只教授知識，更培養獨立思考的能力。
     </p>
     <a href="#booking" class="btn-primary reveal reveal-delay-2"><span>立即預約諮詢</span></a>
@@ -508,7 +548,7 @@
   <div class="phil-content reveal reveal-delay-1">
     <p class="phil-quote">「教育不僅是知識的傳遞，更是點燃學習熱情的火種。」</p>
     <p class="phil-text">
-      在銘銘文理，我們揚棄傳統填鴨式的教學，採用啟發式引導，配合頂級的師資陣容與舒適的學習環境，讓孩子在無壓力的狀態下激發潛能。
+      揚棄傳統填鴨式的教學，採用啟發式引導，配合頂級的師資陣容與舒適的學習環境，讓孩子在無壓力的狀態下激發潛能。
     </p>
     <p class="phil-text">
       我們重視品格與學業的雙向發展，致力於培育具備未來競爭力的全方位人才。
@@ -527,19 +567,19 @@
     <div class="trial-item reveal">
       <h3>英文專區</h3>
       <div class="video-container">
-        <iframe src="https://www.youtube.com/embed/y4df14N9aKY" title="英文試聽影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+        <iframe id="conf-video-english" src="" title="英文試聽影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
       </div>
     </div>
     <div class="trial-item reveal reveal-delay-1">
       <h3>數學專區</h3>
       <div class="video-container">
-        <iframe src="https://www.youtube.com/embed/y4df14N9aKY" title="數學試聽影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+        <iframe id="conf-video-math" src="" title="數學試聽影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
       </div>
     </div>
     <div class="trial-item reveal reveal-delay-2">
       <h3>自然專區</h3>
       <div class="video-container">
-        <iframe src="https://www.youtube.com/embed/y4df14N9aKY" title="自然試聽影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+        <iframe id="conf-video-science" src="" title="自然試聽影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
       </div>
     </div>
   </div>
@@ -578,39 +618,39 @@
           <div class="contact-icon">📍</div>
           <div class="contact-detail">
             <strong>地址</strong>
-            <p>新北市新莊區民安路205號</p>
+            <p id="conf-address">新北市新莊區...</p>
           </div>
         </div>
         <div class="contact-item">
           <div class="contact-icon">📞</div>
           <div class="contact-detail">
             <strong>電話</strong>
-            <p>(02) 2345-6789</p>
+            <p id="conf-phone">(02) ...</p>
           </div>
         </div>
         <div class="contact-item">
           <div class="contact-icon">✉️</div>
           <div class="contact-detail">
             <strong>信箱</strong>
-            <p>service@mingming-edu.com.tw</p>
+            <p id="conf-email">service@...</p>
           </div>
         </div>
         <div class="contact-item">
           <div class="contact-icon">🕒</div>
           <div class="contact-detail">
             <strong>營業時間</strong>
-            <p>週一至週五 14:00 - 22:00<br>週六 09:00 - 18:00</p>
+            <p id="conf-hours">週一至週五...</p>
           </div>
         </div>
       </div>
       
       <div class="social-links">
-        <a href="https://line.me/ti/p/你的LINE網址" target="_blank" title="加入官方 LINE">
+        <a href="#" id="conf-line" target="_blank" title="加入官方 LINE">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
             <path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 4.269 8.846 10.036 9.608.391.084.922.258 1.057.592.122.303.079.767.039 1.083l-.172 1.027c-.053.303-.243 1.187 1.039.647 1.281-.54 6.911-4.069 9.428-6.967 1.739-1.906 2.573-3.812 2.573-5.99zm-15.568 2.529h-2.316V8.121h2.316v1.077h-1.121v.791h1.121v1.076h-1.121v.691h1.121v1.077zm3.109 0h-1.196V8.121h1.196v4.712zm3.626 0h-1.121l-1.393-2.285v2.285h-1.195V8.121h1.121l1.393 2.285V8.121h1.195v4.712zm3.504-3.636h-1.121v.691h1.121v1.076h-1.121v.791h1.121v1.077h-2.316V8.121h2.316v1.076z"/>
           </svg>
         </a>
-        <a href="https://www.facebook.com/你的臉書粉專網址" target="_blank" title="前往 Facebook 粉絲專頁">
+        <a href="#" id="conf-fb" target="_blank" title="前往 Facebook 粉絲專頁">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
             <path d="M22.675 0H1.325C.593 0 0 .593 0 1.325v21.351C0 23.406.593 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.323-.593 1.323-1.325V1.325C24 .593 23.407 0 22.675 0z"/>
           </svg>
@@ -618,7 +658,7 @@
       </div>
 
       <div class="map-container">
-        <iframe src="https://maps.google.com/maps?q=新北市福營國中&t=&z=15&ie=UTF8&iwloc=&output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe id="conf-map" src="" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
     </div>
 
@@ -628,7 +668,7 @@
         <input type="hidden" name="_subject" id="email-subject" value="新的預約諮詢！">
         <input type="text" name="_honey" style="display:none">
         <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_autoresponse" value="您好！我們已經收到您的預約諮詢資料。銘銘文理的專員將會盡快透過您留下的聯絡方式與您聯繫，謝謝您！">
+        <input type="hidden" name="_autoresponse" value="您好！我們已經收到您的預約諮詢資料。專員將會盡快透過您留下的聯絡方式與您聯繫，謝謝您！">
         <input type="hidden" id="sender-ip" name="Sender_IP" value="無法取得">
         
         <div class="form-row">
@@ -701,7 +741,7 @@
         </div>
 
         <div class="form-group" style="display: flex; justify-content: center; margin-bottom: 20px;">
-          <div class="g-recaptcha" data-sitekey="6LeCLP4sAAAAAIhxXn_hjOCa4Fe4wfjHDpcTaFcm"></div>
+          <div id="recaptcha-wrapper"></div>
         </div>
         
         <p style="font-size: 12px; color: #8a7d6b; margin-bottom: 10px; text-align: center;">* 若未收到系統確認信，請至垃圾郵件匣查看，或直接來電聯繫。</p>
@@ -717,24 +757,64 @@
   <div class="footer-top">
     <div class="footer-brand">
       <a href="#" class="logo">
-        <div class="logo-mark"><span style="color:var(--ink)">銘</span></div>
+        <div class="logo-mark">
+          <img class="auto-icon" data-base="picture/icon" alt="Logo">
+        </div>
         <div class="logo-text">
-          <strong style="color:var(--warm-white)">銘銘文理</strong>
-          <em style="color:var(--stone)">Ming Ming Education</em>
+          <strong style="color:var(--warm-white)" class="conf-brand-name">銘銘文理</strong>
+          <em style="color:var(--stone)" class="conf-brand-en">Ming Ming Education</em>
         </div>
       </a>
-      <p>致力提供最優質的教育環境，以嚴謹的態度與溫暖的關懷，陪伴每一位學生走向人生的高峰。</p>
+      <p id="conf-footer-desc">致力提供最優質的教育環境，以嚴謹的態度與溫暖的關懷，陪伴每一位學生走向人生的高峰。</p>
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2026 銘銘文理. All Rights Reserved.</p>
+    <p id="conf-footer-copy">© 2026 銘銘文理. All Rights Reserved.</p>
   </div>
 </footer>
 
 <script>
-  (function() { emailjs.init("dq7BIkVjvv-cdhlu5"); })();
+  // =========================================================
+  // 套用「設定區塊」資料到網頁中 (自動執行)
+  // =========================================================
+  (function applyConfig() {
+      document.title = SITE_CONFIG.pageTitle;
+      document.querySelectorAll('.conf-brand-name').forEach(el => el.innerHTML = SITE_CONFIG.brandName);
+      document.querySelectorAll('.conf-brand-en').forEach(el => el.innerHTML = SITE_CONFIG.brandNameEn);
+      
+      document.getElementById('conf-hero-slogan').innerHTML = SITE_CONFIG.heroSlogan;
+      document.getElementById('conf-hero-desc').innerHTML = SITE_CONFIG.heroDesc;
+
+      document.getElementById('conf-video-english').src = "https://www.youtube.com/embed/" + SITE_CONFIG.videoEnglish;
+      document.getElementById('conf-video-math').src = "https://www.youtube.com/embed/" + SITE_CONFIG.videoMath;
+      document.getElementById('conf-video-science').src = "https://www.youtube.com/embed/" + SITE_CONFIG.videoScience;
+
+      document.getElementById('conf-address').innerHTML = SITE_CONFIG.address;
+      document.getElementById('conf-phone').innerHTML = SITE_CONFIG.phone;
+      document.getElementById('conf-email').innerHTML = SITE_CONFIG.email;
+      document.getElementById('conf-hours').innerHTML = SITE_CONFIG.businessHours;
+
+      document.getElementById('conf-line').href = SITE_CONFIG.lineUrl;
+      document.getElementById('conf-fb').href = SITE_CONFIG.fbUrl;
+      document.getElementById('conf-map').src = SITE_CONFIG.googleMapIframeSrc;
+
+      document.getElementById('conf-footer-desc').innerHTML = SITE_CONFIG.footerDesc;
+      document.getElementById('conf-footer-copy').innerHTML = "© " + new Date().getFullYear() + " " + SITE_CONFIG.brandName + ". All Rights Reserved.";
+      
+      // 動態載入 reCAPTCHA
+      const rcDiv = document.createElement('div');
+      rcDiv.className = 'g-recaptcha';
+      rcDiv.setAttribute('data-sitekey', SITE_CONFIG.recaptchaSiteKey);
+      document.getElementById('recaptcha-wrapper').appendChild(rcDiv);
+      const rcScript = document.createElement('script');
+      rcScript.src = "https://www.google.com/recaptcha/api.js";
+      rcScript.async = true; rcScript.defer = true;
+      document.head.appendChild(rcScript);
+  })();
 
   document.addEventListener('DOMContentLoaded', function() {
+    // 初始化 EmailJS (自動帶入設定檔的 API Key)
+    emailjs.init(SITE_CONFIG.emailjsPublicKey);
 
     // --- 音樂按鈕與全域互動解鎖機制 ---
     const bgm = document.getElementById('bgm');
@@ -758,10 +838,7 @@
 
     if(bgm) {
         bgm.volume = 0.5;
-        
-        // 將觸發事件鎖定在有效的「真實互動」上 (Click, Touch, Keydown)
         const triggerEvents = ['click', 'touchstart', 'keydown'];
-        
         const unlockAudio = () => {
             if(!isPlaying){
                 bgm.play().then(() => {
@@ -770,28 +847,19 @@
                     isPlaying = true;
                 }).catch(e => { console.log("自動播放遭到瀏覽器拒絕", e); });
             }
-            // 解鎖成功後移除監聽器，避免浪費效能
             triggerEvents.forEach(evt => document.removeEventListener(evt, unlockAudio));
         };
-        
-        // 只要使用者在網頁上隨便點擊一下、滑動手機或按鍵盤，就會自動播放
         triggerEvents.forEach(evt => document.addEventListener(evt, unlockAudio, { once: true }));
-
-        // 綁定右下角按鈕事件
-        musicBtn.addEventListener('click', function(e) {
-            e.stopPropagation(); // 避免干擾全域解鎖
-            toggleMusic();
-        });
+        musicBtn.addEventListener('click', function(e) { e.stopPropagation(); toggleMusic(); });
     }
-    // ---------------------------------
     
+    // --- 圖片自動帶入邏輯 ---
     const autoElements = document.querySelectorAll('.auto-img, .auto-icon');
     const possibleExts = ['.jpg', '.png', '.jpeg', '.webp', '.JPG', '.PNG', '.JPEG', '.WEBP'];
     
     autoElements.forEach(el => {
         const basePath = el.getAttribute('data-base');
         let extIndex = 0;
-        
         function tryNextExtension() {
             if (extIndex < possibleExts.length) {
                 el.src = basePath + possibleExts[extIndex];
@@ -808,15 +876,17 @@
         tryNextExtension(); 
     });
 
+    // --- 抓取 IP ---
     fetch('https://api.ipify.org?format=json')
       .then(response => response.json())
       .then(data => { if(data.ip) { document.getElementById('sender-ip').value = data.ip; } })
       .catch(error => console.log('IP 抓取略過'));
 
+    // --- 倒數計時邏輯 (使用設定區的日期) ---
     const exams = [
-        { id: 'cd-huikao', date: '2027-05-15T08:00:00' }, 
-        { id: 'cd-xuece', date: '2027-01-22T08:00:00' },  
-        { id: 'cd-fenke', date: '2026-07-12T08:00:00' }   
+        { id: 'cd-huikao', date: SITE_CONFIG.examHuikao }, 
+        { id: 'cd-xuece', date: SITE_CONFIG.examXuece },  
+        { id: 'cd-fenke', date: SITE_CONFIG.examFenke }   
     ];
 
     function updateCountdowns() {
@@ -846,6 +916,7 @@
     updateCountdowns(); 
     setInterval(updateCountdowns, 1000);
 
+    // --- 游標與導覽列特效 ---
     if (window.matchMedia("(pointer: fine)").matches) {
       const cursor = document.getElementById('cursor');
       const ring = document.getElementById('cursorRing');
@@ -861,9 +932,7 @@
     }
 
     const nav = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-      nav.classList.toggle('scrolled', window.scrollY > 50);
-    });
+    window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 50); });
 
     const mobileMenuBtn = document.getElementById('mobile-menu');
     const navMenu = document.getElementById('nav-menu');
@@ -881,13 +950,12 @@
     }, { threshold: 0.12 });
     reveals.forEach(el => io.observe(el));
 
+    // --- 表單邏輯 ---
     const radioYes = document.getElementById('score-yes');
     const radioNo = document.getElementById('score-no');
     const scoreDetails = document.getElementById('score-details');
 
-    radioYes.addEventListener('change', function() {
-        if (this.checked) scoreDetails.style.display = 'block'; 
-    });
+    radioYes.addEventListener('change', function() { if (this.checked) scoreDetails.style.display = 'block'; });
     radioNo.addEventListener('change', function() {
         if (this.checked) {
             scoreDetails.style.display = 'none'; 
@@ -937,7 +1005,7 @@
         
         if (rateLimitData.date !== today) { rateLimitData = { date: today, count: 0 }; }
         if (rateLimitData.count >= 3) {
-            alert('【系統提示】\n系統偵測到您今日已發送多次預約。\n為確保服務品質，請您直接來電：(02) 2345-6789\n我們將由專人立即為您安排，感謝您的配合！');
+            alert(`【系統提示】\n系統偵測到您今日已發送多次預約。\n為確保服務品質，請您直接來電：${SITE_CONFIG.phone}\n我們將由專人立即為您安排，感謝您的配合！`);
             return;
         }
         if (window.location.protocol === 'file:') {
@@ -988,10 +1056,10 @@
             Sender_IP: document.getElementById('sender-ip').value
         };
 
-        const emailJSPromise = emailjs.send('service_ijz82jw', 'template_r8072iw', templateParams)
+        const emailJSPromise = emailjs.send(SITE_CONFIG.emailjsServiceId, SITE_CONFIG.emailjsTemplateAdmin, templateParams)
             .then(() => {
                 if (templateParams.email !== '') {
-                    emailjs.send('service_ijz82jw', 'template_ecpp15w', templateParams)
+                    emailjs.send(SITE_CONFIG.emailjsServiceId, SITE_CONFIG.emailjsTemplateClient, templateParams)
                            .catch(err => console.log('EmailJS 家長回覆信發送失敗', err));
                 }
                 return true;
@@ -1001,7 +1069,7 @@
                 return false;
             });
 
-        const formSubmitPromise = fetch('https://formsubmit.co/ajax/78robot001@gmail.com', {
+        const formSubmitPromise = fetch('https://formsubmit.co/ajax/' + SITE_CONFIG.formSubmitEmail, {
             method: 'POST',
             body: formData,
             headers: { 'Accept': 'application/json' }
@@ -1036,7 +1104,7 @@
                 } else { throw new Error('雙引擎皆發送失敗'); }
             })
             .catch(error => {
-                alert('【系統提示】\n很抱歉，表單目前無法成功送出。\n這可能是系統繁忙或網路連線不穩所導致。\n\n請您直接來電：(02) 2345-6789\n我們將由專人立即為您服務，感謝您的耐心！');
+                alert(`【系統提示】\n很抱歉，表單目前無法成功送出。\n這可能是系統繁忙或網路連線不穩所導致。\n\n請您直接來電：${SITE_CONFIG.phone}\n我們將由專人立即為您服務，感謝您的耐心！`);
             })
             .finally(() => {
                 btnText.innerText = originalBtnText;
