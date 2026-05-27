@@ -186,16 +186,75 @@
     font-weight: 900; line-height: 1.25; color: var(--ink); margin-bottom: 20px;
   }
 
-  /* ── 教學理念 (Philosophy) ── */
-  .philosophy { background: var(--ink); position: relative; overflow: hidden; }
-  .philosophy::before {
-    content: '道'; position: absolute; right: -30px; bottom: -80px;
-    font-family: 'Noto Serif TC', serif; font-size: 400px; font-weight: 900;
-    color: rgba(201,168,76,.05); pointer-events: none; line-height: 1;
-  }
-  .philosophy .section-label p { color: var(--gold-light); opacity: .7; }
-  .philosophy .section-title { color: var(--warm-white); }
+  /* ── 大考倒數計時區塊 (優化：放寬容器、加大間距、防止折行) ── */
+  .countdown-section { background: var(--ink); color: var(--warm-white); text-align: center; position: relative; overflow: hidden; }
+  .countdown-section .section-label { justify-content: center; }
+  .countdown-section .section-title { color: var(--warm-white); margin-bottom: 48px; }
   
+  .countdown-grid { 
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 40px; /* 加大區塊間距 */
+    max-width: 1200px; /* 放寬整體容器 */
+    margin-left: auto; 
+    margin-right: auto; 
+  }
+  
+  .cd-box { 
+    background: rgba(255,255,255,0.03); 
+    padding: 50px 20px; /* 增加左右留白 */
+    border-radius: 8px; 
+    border: 1px solid rgba(201,168,76,.2); 
+    transition: transform .3s, border-color .3s;
+  }
+  .cd-box:hover { transform: translateY(-5px); border-color: var(--gold); }
+  
+  .cd-title { font-size: 32px; font-weight: 900; letter-spacing: 6px; color: var(--gold); margin-bottom: 24px; }
+  
+  /* 倒數計時容器排版 */
+  .cd-time { 
+    display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+    font-family: 'Noto Sans TC', sans-serif; line-height: 1.2;
+    row-gap: 8px;
+  }
+
+  /* 天、時、分 的數字：第二大 (同大) */
+  .cd-time span {
+    font-size: clamp(28px, 3.5vw, 40px);
+    font-weight: 900;
+    color: #ff5252;
+    text-shadow: 0 0 14px rgba(255, 82, 82, 0.4);
+    margin: 0 4px 0 0;
+    font-family: 'Playfair Display', sans-serif;
+  }
+
+  /* 秒 的數字：單獨放大到最高階 (最大) */
+  .cd-time span.sec {
+    font-size: clamp(38px, 4.5vw, 56px);
+    text-shadow: 0 0 18px rgba(255, 82, 82, 0.6);
+    animation: heartbeat 1s infinite;
+    margin-left: 4px;
+  }
+
+  /* 時間單位：縮至最小 */
+  .cd-time small {
+    font-size: 13px;
+    color: var(--stone-light);
+    font-weight: 400;
+    margin-right: 8px; /* 稍微縮小單位右邊的間距，預防折行 */
+  }
+  .cd-time small:last-child {
+    margin-right: 0;
+  }
+
+  /* 秒數的心跳閃爍動畫 */
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.06); opacity: 0.85; }
+  }
+
+  /* ── 教學理念 (Philosophy) ── */
+  .philosophy { background: var(--warm-white); }
   .phil-content {
     max-width: 900px; margin: 40px 0 0 0; position: relative; z-index: 1;
   }
@@ -203,25 +262,31 @@
     font-family: 'Playfair Display', serif; font-style: italic; font-size: 28px;
     color: var(--gold); line-height: 1.7; margin-bottom: 32px; padding-left: 24px; border-left: 3px solid var(--gold);
   }
-  .phil-text { font-size: 16px; line-height: 2.2; color: var(--stone-light); margin-bottom: 20px; }
+  .phil-text { font-size: 16px; line-height: 2.2; color: var(--stone); margin-bottom: 20px; }
 
-  /* ── 線上試聽 (Online Trial) ── */
-  .trial { background: var(--warm-white); text-align: center; }
+  /* ── 線上試聽 ── */
+  .trial { background: var(--cream); text-align: center; }
   .trial .section-label { justify-content: center; }
-  .video-container {
-    max-width: 900px; margin: 40px auto 0;
-    position: relative; padding-bottom: 42.25%; 
-    height: 0; overflow: hidden; border-radius: 8px;
-    box-shadow: 0 24px 64px rgba(0,0,0,.1);
-    border: 1px solid rgba(201,168,76,.2);
+  .trial-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 40px; max-width: 1100px; margin-left: auto; margin-right: auto;
   }
-  @media (max-width: 768px) { .video-container { padding-bottom: 56.25%; } }
+  .trial-item { text-align: left; }
+  .trial-item h3 { 
+    font-size: 18px; color: var(--ink); margin-bottom: 16px; 
+    border-left: 3px solid var(--gold); padding-left: 12px; letter-spacing: 1px;
+  }
+  .video-container {
+    position: relative; padding-bottom: 56.25%; 
+    height: 0; overflow: hidden; border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    border: 1px solid rgba(201,168,76,.1);
+  }
   .video-container iframe {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
   }
 
-  /* ── 環境展示 (Gallery) ── */
-  .gallery { background: var(--cream); }
+  /* ── 環境展示 ── */
+  .gallery { background: var(--warm-white); }
   .gallery-grid {
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 40px;
   }
@@ -235,8 +300,8 @@
   }
   .gallery-item:hover img { transform: scale(1.08); }
 
-  /* ── 預約與聯絡表單 (Contact/Booking) ── */
-  .contact { background: var(--warm-white); }
+  /* ── 預約與聯絡表單 ── */
+  .contact { background: var(--cream); }
   .contact-inner { display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px; margin-top: 40px; }
   
   .contact-info { padding-top: 16px; }
@@ -256,7 +321,7 @@
     margin-top: 40px; border: 1px solid rgba(201,168,76,.2);
   }
 
-  /* 社群按鈕 (Social Icons) */
+  /* 社群按鈕 */
   .social-links { display: flex; gap: 12px; margin-top: 24px; }
   .social-links a {
     width: 40px; height: 40px; border-radius: 50%; background: var(--ink); color: var(--gold);
@@ -267,7 +332,7 @@
 
   /* 表單 UI 設計 */
   .contact-form {
-    background: var(--cream); border-radius: 4px; padding: 48px;
+    background: var(--warm-white); border-radius: 4px; padding: 48px;
     border: 1px solid rgba(138,125,107,.15);
     box-shadow: 0 10px 40px rgba(0,0,0,0.03);
   }
@@ -280,7 +345,7 @@
   
   input[type="text"], input[type="tel"], input[type="email"], input[type="number"], select, textarea {
     width: 100%; padding: 14px 16px; border: 1px solid rgba(138,125,107,.25); border-radius: 2px;
-    background: var(--warm-white); font-family: 'Noto Sans TC', sans-serif; font-size: 14px; color: var(--ink);
+    background: var(--cream); font-family: 'Noto Sans TC', sans-serif; font-size: 14px; color: var(--ink);
     outline: none; transition: border-color .3s, box-shadow .3s;
   }
   input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,.1); }
@@ -337,7 +402,10 @@
     .hero { padding: 120px 24px 60px; }
     section { padding: 60px 24px; }
     
+    .countdown-grid { grid-template-columns: 1fr; gap: 20px; }
+    .trial-grid { grid-template-columns: 1fr; gap: 32px; }
     .gallery-grid { grid-template-columns: 1fr; }
+    
     .contact-inner { grid-template-columns: 1fr; gap: 40px; }
     .form-row { grid-template-columns: 1fr; }
     footer { padding: 40px 24px 20px; }
@@ -360,9 +428,9 @@
   <div class="menu-toggle" id="mobile-menu">☰</div>
   <ul class="nav-links" id="nav-menu">
     <li><a href="#home">首頁</a></li>
-    <li><a href="#philosophy">教學理念</a></li>
+    <li><a href="#countdown">大考倒數</a></li>
     <li><a href="#trial">線上試聽</a></li>
-    <li><a href="#gallery">環境展示</a></li>
+    <li><a href="#gallery">教學環境</a></li>
     <li><a href="#booking" class="nav-cta">預約諮詢</a></li>
   </ul>
 </nav>
@@ -383,14 +451,36 @@
 
 <div class="ornament-divider">✦ ✦ ✦</div>
 
-<section id="philosophy" class="philosophy">
+<section id="countdown" class="countdown-section">
   <div class="section-label reveal">
     <span style="background:rgba(201,168,76,.4)"></span>
+    <p>Exam Countdown</p>
+  </div>
+  <h2 class="section-title reveal">目標就在眼前</h2>
+  <div class="countdown-grid">
+    <div class="cd-box reveal">
+      <div class="cd-title">會考</div>
+      <div class="cd-time" id="cd-huikao">--</div>
+    </div>
+    <div class="cd-box reveal reveal-delay-1">
+      <div class="cd-title">學測</div>
+      <div class="cd-time" id="cd-xuece">--</div>
+    </div>
+    <div class="cd-box reveal reveal-delay-2">
+      <div class="cd-title">分科</div>
+      <div class="cd-time" id="cd-fenke">--</div>
+    </div>
+  </div>
+</section>
+
+<section id="philosophy" class="philosophy">
+  <div class="section-label reveal">
+    <span></span>
     <p>Our Philosophy</p>
   </div>
-  <h2 class="section-title reveal" style="color:var(--warm-white)">教學理念</h2>
+  <h2 class="section-title reveal">教學理念</h2>
   <div class="phil-content reveal reveal-delay-1">
-    <p class="phil-quote">「教育不僅是知識的傳遞，更是點燃學習熱情的火種。」</p>
+    <p class="phil-quote">「教育不僅是知識的傳遞，幕後更是點燃學習熱情的火種。」</p>
     <p class="phil-text">
       在頂峰菁英教育，我們揚棄傳統填鴨式的教學，採用啟發式引導，配合頂級的師資陣容與舒適的學習環境，讓孩子在無壓力的狀態下激發潛能。
     </p>
@@ -406,9 +496,26 @@
     <p>Online Trial</p>
   </div>
   <h2 class="section-title reveal">線上試聽體驗</h2>
-  <p class="reveal" style="color:var(--stone); margin-bottom: 20px;">透過影片感受我們的上課氛圍與教學魅力</p>
-  <div class="video-container reveal reveal-delay-1">
-    <iframe src="https://www.youtube.com/embed/y4df14N9aKY" title="線上試聽影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  <p class="reveal" style="color:var(--stone); margin-bottom: 20px;">從精準解題到觀念啟發，提前感受頂級名師的授課魅力</p>
+  <div class="trial-grid">
+    <div class="trial-item reveal">
+      <h3>英文專區</h3>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/y4df14N9aKY" title="英文試聽影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
+    </div>
+    <div class="trial-item reveal reveal-delay-1">
+      <h3>數學專區</h3>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/y4df14N9aKY" title="數學試聽影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
+    </div>
+    <div class="trial-item reveal reveal-delay-2">
+      <h3>自然專區</h3>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/y4df14N9aKY" title="自然試聽影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -417,16 +524,16 @@
     <span></span>
     <p>Our Environment</p>
   </div>
-  <h2 class="section-title reveal">專業環境與成果</h2>
+  <h2 class="section-title reveal">教學環境照片</h2>
   <div class="gallery-grid">
     <div class="gallery-item reveal">
-      <img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=600&auto=format&fit=crop" alt="明亮的教室環境">
+      <img src="picture/1.jpg" alt="教學環境 1">
     </div>
     <div class="gallery-item reveal reveal-delay-1">
-      <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=600&auto=format&fit=crop" alt="一對一專業輔導">
+      <img src="picture/2.jpg" alt="教學環境 2">
     </div>
     <div class="gallery-item reveal reveal-delay-2">
-      <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=600&auto=format&fit=crop" alt="學生小組討論">
+      <img src="picture/3.jpg" alt="教學環境 3">
     </div>
   </div>
 </section>
@@ -445,7 +552,7 @@
           <div class="contact-icon">📍</div>
           <div class="contact-detail">
             <strong>地址</strong>
-            <p>台北市信義區學習大道 100 號 5 樓</p>
+            <p>新北市新莊區民安路205號</p>
           </div>
         </div>
         <div class="contact-item">
@@ -485,7 +592,7 @@
       </div>
 
       <div class="map-container">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.70350669229!2d121.5619183!3d25.0441403!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442abb6da80a7ad%3A0xacc4d11dc963103c!2sTaipei%20City%20Hall!5e0!3m2!1sen!2stw!4v1700000000000!5m2!1sen!2stw" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe src="https://maps.google.com/maps?q=新北市福營國中&t=&z=15&ie=UTF8&iwloc=&output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
     </div>
 
@@ -601,7 +708,7 @@
 </footer>
 
 <script>
-  // 初始化 EmailJS：寫入你的 Public Key
+  // 初始化 EmailJS
   (function() {
       emailjs.init("dq7BIkVjvv-cdhlu5");
   })();
@@ -615,6 +722,36 @@
           if(data.ip) { document.getElementById('sender-ip').value = data.ip; }
       })
       .catch(error => console.log('IP 抓取略過'));
+
+    // 【大考倒數精確到秒鐘】
+    const exams = [
+        { id: 'cd-huikao', date: '2027-05-15T08:00:00' }, 
+        { id: 'cd-xuece', date: '2027-01-22T08:00:00' },  
+        { id: 'cd-fenke', date: '2026-07-12T08:00:00' }   
+    ];
+
+    function updateCountdowns() {
+        const now = new Date().getTime();
+        exams.forEach(exam => {
+            const target = new Date(exam.date).getTime();
+            const diff = target - now;
+            const el = document.getElementById(exam.id);
+            if (el) {
+                if (diff > 0) {
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                    // 統一顯示格式
+                    el.innerHTML = `<span>${days}</span><small>天</small><span>${hours}</span><small>時</small><span>${minutes}</span><small>分</small><span class="sec">${seconds}</span><small>秒後</small>`;
+                } else {
+                    el.innerHTML = "<span style='color:var(--gold)'>考試已結束</span>"; 
+                }
+            }
+        });
+    }
+    updateCountdowns(); 
+    setInterval(updateCountdowns, 1000);
 
     // 1. 滑鼠游標特效
     if (window.matchMedia("(pointer: fine)").matches) {
@@ -647,7 +784,7 @@
       link.addEventListener('click', () => navMenu.classList.remove('active'));
     });
 
-    // 3. 滾動浮現動畫 (支援重複觸發)
+    // 3. 滾動浮現動畫 
     const reveals = document.querySelectorAll('.reveal');
     const io = new IntersectionObserver((entries) => {
       entries.forEach(e => {
@@ -682,23 +819,21 @@
         input.addEventListener('wheel', e => e.preventDefault(), { passive: false });
     });
 
-    // --- 新增：自製防機器人數學驗證題庫生成 ---
+    // 6. 防機器人數學驗證
     const mathLabel = document.getElementById('math-captcha-label');
     const mathInput = document.getElementById('math-captcha-input');
     let mathAnswer = 0;
 
     function generateMathCaptcha() {
-        const num1 = Math.floor(Math.random() * 10) + 1; // 產生 1~10 亂數
-        const num2 = Math.floor(Math.random() * 10) + 1; // 產生 1~10 亂數
+        const num1 = Math.floor(Math.random() * 10) + 1; 
+        const num2 = Math.floor(Math.random() * 10) + 1; 
         mathAnswer = num1 + num2;
         mathLabel.innerHTML = `防機器人驗證 <span class="form-note">(*請回答以下算式)</span><br><br>請問 <strong>${num1} + ${num2} = ?</strong>`;
         mathInput.value = '';
     }
-    // 網頁載入時馬上產生一題
     generateMathCaptcha();
-    // ------------------------------------------
 
-    // 6. 表單送出：【同時雙引擎並發發送】
+    // 7. 表單送出
     const bookingForm = document.getElementById('booking-form');
     const submitBtn = document.getElementById('submit-btn');
     const btnText = document.getElementById('btn-text');
@@ -706,36 +841,19 @@
     bookingForm.addEventListener('submit', function(event) {
         event.preventDefault(); 
         
-        // --- 檢查 1：自製數學驗證 ---
         if (parseInt(mathInput.value) !== mathAnswer) {
             alert('防機器人驗證：數學答案錯誤，請再試一次！');
-            generateMathCaptcha(); // 答錯就重出一題
+            generateMathCaptcha(); 
             mathInput.focus();
             return;
         }
 
-        // --- 檢查 2：Google reCAPTCHA 驗證 ---
         const recaptchaResponse = grecaptcha.getResponse();
         if (recaptchaResponse.length === 0) {
             alert('請先勾選「我不是機器人」驗證！');
             return;
         }
 
-        // 【作業測試用】將你要求的密鑰 (Secret Key) 寫入前端
-        const secretKey = '6LeCLP4sAAAAAIkd0CIrohhvjiVSzBZUY5hvaJqr';
-        console.log(`[驗證資訊] 準備使用 Secret Key: ${secretKey} 與 Token: ${recaptchaResponse} 進行驗證...`);
-        /*
-        fetch('https://www.google.com/recaptcha/api/siteverify', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `secret=${secretKey}&response=${recaptchaResponse}`
-        })
-        .then(res => res.json())
-        .then(data => console.log('驗證結果:', data));
-        */
-        // --------------------------------
-        
-        // 防護：防止狂刷表單 (一日上限 3 次)
         const today = new Date().toLocaleDateString();
         let rateLimitData = JSON.parse(localStorage.getItem('bookingRateLimit') || '{}');
         
@@ -755,27 +873,22 @@
         const emailInput = document.getElementById('contact-email').value.trim();
         const phoneInput = document.getElementById('contact-phone').value.trim();
 
-        // 雖然 HTML 已經加了 required，但用 JS 再多做一層防護更保險
         if (emailInput === '' || phoneInput === '') {
             alert('請務必提供「電子信箱」與「家長電話」，以便我們與您聯繫！');
             return;
         }
 
-        // --- 新增檢查：電話格式必須為 10 碼數字 ---
         const phoneRegex = /^\d{10}$/;
         if (!phoneRegex.test(phoneInput)) {
             alert('【格式錯誤】電話號碼必須為 10 碼數字（例如：0912345678），請重新輸入！');
             document.getElementById('contact-phone').focus();
             return;
         }
-        // ----------------------------------------
 
-        // 動態設定 FormSubmit 信件主旨，防止 Gmail 將不同家長的信件合併
         const studentName = document.getElementById('student-name').value.trim();
         const uniqueTime = new Date().getTime(); 
         document.getElementById('email-subject').value = `[預約] ${studentName} 的諮詢資料 - ${uniqueTime}`;
 
-        // 改變按鈕狀態
         const originalBtnText = btnText.innerText;
         btnText.innerText = '傳送資料中...';
         submitBtn.disabled = true;
@@ -799,10 +912,8 @@
             Sender_IP: document.getElementById('sender-ip').value
         };
 
-        // 啟動 EmailJS 寄信流程
         const emailJSPromise = emailjs.send('service_ijz82jw', 'template_r8072iw', templateParams)
             .then(() => {
-                // 補習班收件成功後，如果有填寫信箱，背景發送家長感謝信
                 if (templateParams.email !== '') {
                     emailjs.send('service_ijz82jw', 'template_ecpp15w', templateParams)
                            .catch(err => console.log('EmailJS 家長回覆信發送失敗', err));
@@ -814,32 +925,33 @@
                 return false;
             });
 
-        // 啟動 FormSubmit 寄信流程
         const formSubmitPromise = fetch('https://formsubmit.co/ajax/78robot001@gmail.com', {
             method: 'POST',
             body: formData,
             headers: { 'Accept': 'application/json' }
         })
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) throw new Error(`FormSubmit 回傳狀態: ${res.status}`);
+            return res.json();
+        })
         .then(data => {
             if (data.success === "true" || data.success === true) {
                 return true;
             } else {
+                console.error('FormSubmit 拒絕請求:', data);
                 return false;
             }
         })
         .catch(error => {
-            console.error('FormSubmit 發送失敗:', error);
+            console.error('FormSubmit 連線錯誤:', error);
             return false;
         });
 
-        // 等待兩套引擎同時處理完畢
         Promise.all([emailJSPromise, formSubmitPromise])
             .then((results) => {
                 const isEmailJSSuccess = results[0];
                 const isFormSubmitSuccess = results[1];
 
-                // 只要有任何一個系統發送成功，就認定為預約成功
                 if (isEmailJSSuccess || isFormSubmitSuccess) {
                     rateLimitData.count += 1;
                     localStorage.setItem('bookingRateLimit', JSON.stringify(rateLimitData));
@@ -848,10 +960,8 @@
                     bookingForm.reset(); 
                     scoreDetails.style.display = 'none'; 
                     
-                    // --- 成功後重置所有驗證，讓使用者可以再次發送 ---
                     grecaptcha.reset();
                     generateMathCaptcha();
-                    // ----------------------------------------------------
                 } else {
                     throw new Error('雙引擎皆發送失敗');
                 }
